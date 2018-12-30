@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="#" th:action="@{/savedRegion}">
+    <label>
+        <input type="text" name="regionName" th:field="*{region.name}" placeholder="Region name?"/>
+    </label>
+    <label>
+        <select th:field="${region.country}">
+            <option th:each="country : ${countryList}" th:value="${country.id}" th:text="${country.name}"></option>
+        </select>
+    </label>
+    <label>
+        <select th:field="${region.range}">
+            <option th:each="range : ${rangeList}" th:value="${range.id}" th:text="${range.name}"></option>
+        </select>
+    </label>
+    <input type="submit" value="Add region!"/>
+</form>
+</body>
+</html>
