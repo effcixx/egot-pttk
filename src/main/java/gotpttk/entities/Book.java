@@ -52,4 +52,12 @@ public class Book {
     public void setBookRoutes(Collection<BookRoute> bookRoutes) {
         this.bookRoutes = bookRoutes;
     }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", owner=" + owner +
+                '}';
+    }
 }

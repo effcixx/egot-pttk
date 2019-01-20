@@ -1,5 +1,6 @@
 package gotpttk.service;
 
+import gotpttk.dao.RouteDao;
 import gotpttk.entities.Route;
 import gotpttk.dao.EntityDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.List;
 public class RouteService {
 
     @Autowired
-    public EntityDao<Route, Integer> routeDao;
+    public RouteDao routeDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveOrUpdate(Route route){
@@ -33,5 +34,14 @@ public class RouteService {
     public void delete(Route route){
         routeDao.delete(route);
     }
+
+    /// TODO ZMIENIC
+
+    public List<Route> readAllPublic(){
+        return routeDao.readAllPublic();
+    }
+
+    public List<Route> readRoutesDefinedByUser(int userId) { return routeDao.readRoutesDefinedByUser(userId); }
+
 }
 

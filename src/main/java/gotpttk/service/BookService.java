@@ -1,7 +1,8 @@
 package gotpttk.service;
 
+import gotpttk.dao.BookDao;
 import gotpttk.entities.Book;
-import gotpttk.dao.EntityDao;
+import gotpttk.entities.BookRoute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,7 +15,11 @@ import java.util.List;
 public class BookService {
 
     @Autowired
-    public EntityDao<Book, Integer> bookDao;
+    public BookDao bookDao;
+
+    @Autowired
+    private BookRouteService bookRouteService;
+
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveOrUpdate(Book book){
@@ -33,5 +38,26 @@ public class BookService {
     public void delete(Book book){
         bookDao.delete(book);
     }
+
+    public void updatePointsAndBadgesAfterCompletionOfRoute(Book book){
+        System.out.println("Validating...");
+    }
+
+    public Book getBookWithUserId(int userId){
+        return bookDao.getBookWithUserId(userId);
+    }
+
+    public int getCurrentNumberOfPoints(int userId){
+        var latestRoutes = bookRouteService.readRoutesUnderCurrentBadge(userId);
+        System.out.println("******************************");
+        latestRoutes.sort((b1, b2) -> b2.getDateOfCompletion().compareTo(b1.getDateOfCompletion()));
+        for (var r : latestRoutes){
+            System.out.println(r.getPointsAwarded() + ": " + r.getRoute());
+        }
+        System.out.println("******************************");
+        return latestRoutes.stream().mapToInt(BookRoute::getPointsAwarded).sum();
+    }
+
+
 }
 

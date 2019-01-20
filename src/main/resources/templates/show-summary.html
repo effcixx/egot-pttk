@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/test.css">
+</head>
+<body>
+<header class="page-header">
+    <span id="title">eGOT PTTK</span>
+    <nav class="navigation-list">
+        <ul>
+            <li><a href="/trasy/show">Moja książeczka</a></li>
+            <li><a href="/trasy/showSummary">Podsumowanie odznak</a></li>
+            <li>adasda</li>
+            <li>asdsada</li>
+        </ul>
+    </nav>
+</header>
+<div class="main-content">
+    <div class="subpage-name">Podsumowanie odznak</div>
+    <span id="subtitle-summary">Wybierz odznakę, dla której wygenerować podsumowanie</span>
+
+    <div class="available-badge" id="current-badge">Aktualnie zdobywana odznaka</div>
+
+    <div class="badges-outer-container">
+        <div class="badges-container">
+            <a href="/trasy/showDetailedCurrent">
+                <img class="current-badge-image"
+                     th:src="'/stylesheets/images/odznakaPoziom'+${currentBadgeCategory.getHierarchyLevel()}+'.jpg'" alt="Odznaka - W góry brązowa" />
+            </a>
+        </div>
+    </div>
+
+    <div class="available-badge" id="old-badges">Odznaki już zdobyte</div>
+    <p th:text="'Current badge: ' + ${currentBadgeCategory.name} "></p>
+
+    <!--<p th:text="${badge.getAchievingDate()} + ': ' + ${badge.getCategory()}"></p>-->
+
+    <div class="badges-outer-container">
+        <div class="badges-container">
+            <th:block th:each="badge : ${userBadges}">
+                <a th:href="@{'/trasy/showDetailed?badgeId='+${badge.id}}">
+                    <img class="old-badge-image"
+                         th:src="'/stylesheets/images/odznakaPoziom'+${badge.getCategory().getHierarchyLevel()}+'.jpg'"
+                         alt="Odznaka - W góry brązowa" />
+                </a>
+            </th:block>
+        </div>
+    </div>
+
+
+</div>
+
+
+<footer id="book-footer">Developed by MH</footer>
+</body>
+</html>

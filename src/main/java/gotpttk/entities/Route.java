@@ -87,4 +87,22 @@ public class Route {
     public void setRouteOwner(Tourist routeOwner) {
         this.routeOwner = routeOwner;
     }
+
+    @Override
+    public String toString() {
+        return "Route{" +
+                "id=" + id +
+                ", pointsStartToEnd=" + pointsStartToEnd +
+                ", pointsEndToStart=" + pointsEndToStart +
+                ", startingPoint=" + startingPoint +
+                ", endPoint=" + endPoint +
+                ", routeOwner=" + routeOwner +
+                '}';
+    }
+
+    public String showRoute(){
+        return startingPoint.getName() + " - " + endPoint.getName();
+    }
+
+
 }

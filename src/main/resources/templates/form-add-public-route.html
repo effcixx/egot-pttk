@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:object="${bookRouteWrapper}" id="predefined-route-container" style="display: none">
+    <table>
+        <thead>
+        <tr>
+            <th>Trasa</th>
+            <th>Region</th>
+            <th>Punktacja</th>
+            <th>Punktacja (rev)</th>
+            <th>Wybierz!</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="route : ${publicRoutes}">
+            <tr>
+                <td th:text="${route.startingPoint.name} + ' - ' + ${route.endPoint.name}"></td>
+                <td th:text="${route.startingPoint.region.name}"></td>
+                <td th:text="${route.pointsStartToEnd}"></td>
+                <td th:text="${route.pointsEndToStart}"></td>
+                <td>
+                    <button th:data-thing="${route.showRoute()}"
+                            th:data-id="${route.id}"
+                            onclick="updateForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">click
+                    </button>
+
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+    <form id="public-route-form" style="display: none"
+          onsubmit="if(!confirm('Czy potwierdzasz dodanie do książeczki?')){return false;}"
+          method="post" action="/trasy/submitRoute" th:object="${bookRouteWrapper}">
+        <label for="route"><input type="text" id="route" name="route" disabled /></label>
+        <label for="date"><input type="date" id="date" name="date" class="datePicker" th:field="*{dateOfCompletion}" required/></label>
+        <span th:if="${#fields.hasErrors('dateOfCompletion')}" th:errors="*{dateOfCompletion}"></span>
+        <br/>
+        <label for="direction">
+            <select th:field="*{isFromStartToEnd}" id="direction" name="direction">
+                <option th:value="true">Wprzód</option>
+                <option th:value="false">Od końca</option>
+            </select>
+        </label>
+        <label><input type="text" id="chosenRouteId" name="chosenRouteId" th:field="*{chosenRouteId}"/></label>
+        <label><input type="submit" id="submitButton" value="Dodaj trasę" /></label>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/test.css">
+    <style>
+        .ui-datepicker {
+            width: 300px;
+            height: auto;
+            margin: 5px auto 0;
+            font: 9pt Arial, sans-serif;
+            -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+            -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+            z-index: 30 !important;
+        }
+        .ui-datepicker a {
+            text-decoration: none;
+            z-index: 30 !important;
+        }
+        .ui-datepicker table {
+            width: 100%;
+            background-color: aliceblue;
+            z-index: 30 !important;
+        }
+        .ui-datepicker-header{
+            background-color: #5776ff;
+            color: white;
+            text-align: center;
+            font-size: 1.3em;
+            height: 30px;
+            z-index: 30 !important;
+        }
+        .ui-datepicker-title {
+            padding-top: 7px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border-width: 1px;
+            z-index: 30 !important;
+        }
+
+        .ui-datepicker-prev, .ui-datepicker-next {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            cursor: pointer;
+            /*background-image: url("stylesheets/images/arrow.png");*/
+            background-color: #5776ff;
+            background-repeat: no-repeat;
+            line-height: 600%;
+            overflow: hidden;
+            z-index: 900 !important;
+        }
+        .ui-datepicker-prev {
+            float: left;
+            background-position: center -30px;
+        }
+        .ui-datepicker-next {
+            float: right;
+            background-position: center 0px;
+        }
+
+        .ui-datepicker th{
+            color: #b9b9e1;
+            z-index: 30 !important;
+        }
+
+        .ui-datepicker tbody td {
+            padding: 0;
+            background-color: aliceblue;
+            z-index: 30 !important;
+        }
+
+        .ui-datepicker td span, .ui-datepicker td a {
+            display: inline-block;
+            font-weight: bold;
+            text-align: center;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            color: #666666;
+            text-shadow: 1px 1px 0 #fff;
+            filter: dropshadow(color=#fff, offx=1, offy=1);
+            z-index: 30 !important;
+        }
+        .ui-datepicker-unselectable .ui-state-default {
+            color: #b4b3b3;
+            z-index: 30 !important;
+        }
+        .ui-datepicker-calendar .ui-state-hover {
+            background: #d1d0f7;
+            font-size: 1.1em;
+            z-index: 30 !important;
+        }
+    </style>
+</head>
+<body id="book-page-body">
+<header class="page-header">
+    <span id="title">eGOT PTTK</span>
+    <nav class="navigation-list">
+        <ul>
+            <li><a href="/trasy/show">Moja książeczka</a></li>
+            <li><a href="/trasy/showSummary">Podsumowanie odznak</a></li>
+            <li>adasda</li>
+            <li>asdsada</li>
+        </ul>
+    </nav>
+</header>
+
+<div class="main-content">
+    <div class="subpage-name">Moja książeczka</div>
+    <div id="info-about-book">
+        <button id="addRouteButton">Dodaj trasę do książeczki</button>
+        <span id="info-points">Punktów:
+        <span id="number-of-points" th:text="${currentNumberOfPoints}"></span>
+    </span>
+    </div>
+
+    <!--<div class="routes-container">-->
+    <!--<div class="table-wrapper">-->
+    <!--<table class="routes-from-user-book">-->
+    <!--<thead>-->
+    <!--<tr>-->
+    <!--<th>Z punktu</th>-->
+    <!--<th>Do punktu</th>-->
+    <!--<th>Data przejścia</th>-->
+    <!--<th>Punkty</th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <!--<tbody>-->
+    <!--<th:block th:each="route : ${currentBookRoutes}">-->
+    <!--<tr>-->
+    <!--<td th:text="${route.isFromStartToEnd} ? ${route.route.startingPoint.name} : ${route.route.endPoint.name}"></td>-->
+    <!--<td th:text="${route.isFromStartToEnd} ? ${route.route.endPoint.name} : ${route.route.startingPoint.name}"></td>-->
+    <!--<td th:text="${route.dateOfCompletion}"></td>-->
+    <!--<td th:text="${route.pointsAwarded}"></td>-->
+    <!--</tr>-->
+    <!--</th:block>-->
+    <!--</tbody>-->
+    <!--</table>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <th:block th:each="entry : ${badgeRouteMap}">
+        <p th:text="'Trasy przebyte podczas zdobywania odznaki: ' + ${entry.getKey().getCategory().name}+
+    ', zdobytej: ' + ${entry.getKey().getAchievingDate()}"></p>
+        <div id="routes-container">
+            <div id="table-wrapper">
+                <table id="routes-from-user-book">
+                    <thead>
+                    <tr>
+                        <th>Z punktu</th>
+                        <th>Do punktu</th>
+                        <th>Data przejścia</th>
+                        <th>Punkty</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="route : ${entry.getValue()}">
+                        <tr>
+                            <td th:text="${route.isFromStartToEnd} ? ${route.route.startingPoint.name} : ${route.route.endPoint.name}"></td>
+                            <td th:text="${route.isFromStartToEnd} ? ${route.route.endPoint.name} : ${route.route.startingPoint.name}"></td>
+                            <td th:text="${route.dateOfCompletion}"></td>
+                            <td th:text="${route.pointsAwarded}"></td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </th:block>
+
+
+    <div id="popup-crud" class="outer-popup">
+        <div class="middle-popup">
+            <div class="inner-popup">
+                <div class="close-popup">+</div>
+                <!--<span id="popupMessage">Abcdeef</span>-->
+                <span th:if="${crudMessage != null}">
+                <span id="popupMessage" th:text="${crudMessage}"></span>
+            </span>
+            </div>
+        </div>
+    </div>
+    <div class="bg-modal">
+        <div class="modal-contents">
+            <button id="predefined-route" class="chooseRouteTypeButton"
+                    onclick="changeVisibilityOfContainer('large-route-container', 'large-user-route-container')">Trasa punktowana</button>
+            <button id="users-route" class="chooseRouteTypeButton" onclick="changeVisibilityOfContainer('large-user-route-container', 'large-route-container')">Trasa niepunktowana</button>
+            <div class="close">+</div>
+
+            <div id="large-route-container" class="large-route-container" style="display: none">
+                <div th:object="${bookRouteWrapper}" id="predefined-route-container" class="predefined-route-container">
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Trasa</th>
+                                <th>Region</th>
+                                <th>Punktacja</th>
+                                <th>Punktacja (rev)</th>
+                                <th>Wybierz!</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="route : ${publicRoutes}">
+                                <tr>
+                                    <td th:text="${route.startingPoint.name} + ' - ' + ${route.endPoint.name}"></td>
+                                    <td th:text="${route.startingPoint.region.name}"></td>
+                                    <td th:text="${route.pointsStartToEnd}"></td>
+                                    <td th:text="${route.pointsEndToStart}"></td>
+                                    <td>
+                                        <button class="choose-route-button"
+                                                th:data-thing="${route.showRoute()}"
+                                                th:data-id="${route.id}"
+                                                onclick="updateForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">click
+                                        </button>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <form id="public-route-form" style="display: none" class="route-form"
+                      onsubmit="if(!confirm('Czy potwierdzasz dodanie do książeczki?')){return false;}"
+                      method="post" action="/trasy/submitRoute" th:object="${bookRouteWrapper}">
+                    <label for="route"><input type="text" id="route" name="route" class="routeText" disabled /></label>
+                    <label for="direction">
+                        <select th:field="*{isFromStartToEnd}" id="direction" name="direction" class="directionText">
+                            <option th:value="true" selected>Wprzód</option>
+                            <option th:value="false">Od końca</option>
+                        </select>
+                    </label>
+                    <label for="date"><input type="text" id="date" name="date" class="datePicker" th:field="*{dateOfCompletion}" required/></label>
+                    <span th:if="${#fields.hasErrors('dateOfCompletion')}" th:errors="*{dateOfCompletion}"></span>
+                    <br/>
+                    <label><input type="hidden" id="chosenRouteId" name="chosenRouteId" th:field="*{chosenRouteId}"/></label>
+                    <label><input type="submit" id="submitButton" class="submitRouteButton" value="Dodaj trasę" /></label>
+                </form>
+            </div>
+
+            <div id="large-user-route-container" class="large-user-route-container" style="display: none;">
+                <div id="user-route-container" class="predefined-route-container">
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Trasa</th>
+                                <th>Region</th>
+                                <th>Punktacja</th>
+                                <th>Punktacja (rev)</th>
+                                <th>Wybierz!</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="route : ${userRoutes}">
+                                <tr>
+                                    <td th:text="${route.startingPoint.name} + ' - ' + ${route.endPoint.name}"></td>
+                                    <td th:text="${route.startingPoint.region.name}"></td>
+                                    <td th:text="${route.pointsStartToEnd}"></td>
+                                    <td th:text="${route.pointsEndToStart}"></td>
+                                    <td>
+                                        <button class="choose-route-button"
+                                                th:data-thing="${route.showRoute()}" th:data-id="${route.id}"
+                                                onclick="updateSecondForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">click
+                                        </button>
+
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <form id="user-route-form" style="display: none" class="route-form"
+                      onsubmit="if(!confirm('Czy potwierdzasz dodanie do książeczki?')){return false;}"
+                      method="post" action="/trasy/submitRoute" th:object="${bookRouteWrapper}">
+                    <label for="route"><input type="text" id="userRoute" class="routeText" name="route" disabled /></label>
+                    <label for="direction">
+                        <select th:field="*{isFromStartToEnd}" id="userRouteDirection" class="directionText" name="direction">
+                            <option value="true">Wprzód</option>
+                            <option value="false">Od końca</option>
+                        </select>
+                    </label>
+                    <label for="date"><input type="text" id="userRouteDate" name="date" class="datePicker" th:field="*{dateOfCompletion}"
+                                             required/></label>
+                    <br/>
+                    <label><input type="hidden" id="chosenUserRouteId" name="chosenRouteId" th:field="*{chosenRouteId}"/></label>
+                    <label><input type="submit" id="submitUserRouteButton" class="submitRouteButton" value="Dodaj trasę" /></label>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer id="book-footer">Developed by MH</footer>
+
+</body>
+</html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script>
+    function showCrudMessage(message){
+        var popup = document.getElementById("popupMessage");
+        popup.innerText = message;
+        popup.style.display = "block";
+    }
+
+    document.getElementById('addRouteButton').addEventListener("click", function() {
+        document.querySelector('.bg-modal').style.display = "flex";
+    });
+
+    document.querySelector('.close').addEventListener("click", function() {
+        document.querySelector('.bg-modal').style.display = "none";
+    });
+
+    document.querySelector('.close-popup').addEventListener("click", function () {
+        document.querySelector('.outer-popup').style.display = "none";
+    });
+
+    var popupCrud = document.getElementById("popup-crud");
+    var popupMessage = document.getElementById("popupMessage");
+    if (popupMessage == null){
+        popupCrud.style.display = "none";
+    }
+
+    function onLoad(){
+        var today = new Date().toISOString().split('T')[0];
+        var dateInputs = document.getElementsByClassName("datePicker");
+        for (var i=0; i<dateInputs.length; i++){
+            dateInputs[i].setAttribute('max', today);
+        }
+    }
+
+    $(function () {
+        $("#date").datepicker({
+            inline: true,
+            showOtherMonths: true,
+            dayNamesMin: ['N', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'S'],
+            monthNames: ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień",
+                "Wrzesień", "Październik", "Listopad", "Grudzień"],
+            maxDate: 0
+        });
+    });
+
+    $(function () {
+        $("#dateTest").datepicker({
+            beforeShow: function() {
+                setTimeout(function(){
+                    $('.ui-datepicker').css('z-index', 99999999999999);
+                }, 0);
+            },
+            inline: true,
+            showOtherMonths: true,
+            dayNamesMin: ['N', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'S'],
+            monthNames: ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień",
+                "Wrzesień", "Październik", "Listopad", "Grudzień"],
+            maxDate: 0
+        });
+    });
+
+    $(function () {
+        $("#userRouteDate").datepicker({
+            beforeShow: function() {
+                setTimeout(function(){
+                    $('.ui-datepicker').css('z-index', 99999999999999);
+                }, 0);
+            },
+            inline: true,
+            showOtherMonths: true,
+            dayNamesMin: ['N', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'S'],
+            monthNames: ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień",
+                "Wrzesień", "Październik", "Listopad", "Grudzień"],
+            maxDate: 0
+        });
+    });
+
+    function updateForm(name, id){
+        document.getElementById("public-route-form").style.display = "block";
+        var routeNameInput = document.getElementById("route");
+        routeNameInput.value = name;
+        document.getElementById("chosenRouteId").value = id;
+    }
+
+    function updateSecondForm(name, id){
+        document.getElementById("user-route-form").style.display = "block";
+        var routeNameInput = document.getElementById("userRoute");
+        routeNameInput.value = name;
+        document.getElementById("chosenUserRouteId").value = id;
+    }
+
+    function changeVisibilityOfContainer(containerId, otherContainerId){
+        var container = document.getElementById(containerId);
+        var currentStyleDisplay = container.style.display;
+        var otherContainer = document.getElementById(otherContainerId);
+        otherContainer.style.display = "none";
+
+        container.style.display = currentStyleDisplay === "none" ? "block" : "none";
+    }
+</script>

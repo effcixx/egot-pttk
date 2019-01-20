@@ -35,5 +35,11 @@ public class BookDao implements EntityDao<Book, Integer> {
     public void delete(Book entity) {
         sessionFactory.getCurrentSession().delete(entity);
     }
+
+    public Book getBookWithUserId(int userId) {
+        var session = sessionFactory.getCurrentSession();
+        var query = session.createQuery("from Book where owner.id = " + userId);
+        return (Book)query.getResultList().get(0);
+    }
 }
 

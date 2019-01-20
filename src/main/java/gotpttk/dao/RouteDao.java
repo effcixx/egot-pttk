@@ -31,6 +31,22 @@ public class RouteDao implements EntityDao<Route, Integer> {
         return query.getResultList();
     }
 
+    /// TODO ZMIENIC
+    @SuppressWarnings("unchecked")
+    public List<Route> readAllPublic(){
+        var session = sessionFactory.getCurrentSession();
+        var query = session.createQuery("from Route where routeOwner = null");
+        return query.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Route> readRoutesDefinedByUser(int userId){
+        var session = sessionFactory.getCurrentSession();
+        var query = session.createQuery("from Route where routeOwner.id = "+userId);
+        //query.setParameter(userId, "userId");
+        return query.getResultList();
+    }
+
     @Override
     public void delete(Route entity) {
         sessionFactory.getCurrentSession().delete(entity);

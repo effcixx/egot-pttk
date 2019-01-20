@@ -8,11 +8,32 @@ import java.util.Objects;
 @Table(name = "trasy_ksiazeczki", schema = "got_pttk", catalog = "")
 public class BookRoute {
     private int id;
-    private byte isFromStartToEnd;
+    private boolean isFromStartToEnd;
     private Date dateOfCompletion;
     private Category currentBadgeCategory;
     private Route route;
     private Book book;
+    private int pointsAwarded;
+
+    public BookRoute() {
+    }
+
+    public BookRoute(boolean isFromStartToEnd, Date dateOfCompletion, Category currentBadgeCategory, Route route, Book book) {
+        this.isFromStartToEnd = isFromStartToEnd;
+        this.dateOfCompletion = dateOfCompletion;
+        this.currentBadgeCategory = currentBadgeCategory;
+        this.route = route;
+        this.book = book;
+    }
+
+    public BookRoute(boolean isFromStartToEnd, Date dateOfCompletion, Category currentBadgeCategory, Route route, Book book, int pointsAwarded) {
+        this.isFromStartToEnd = isFromStartToEnd;
+        this.dateOfCompletion = dateOfCompletion;
+        this.currentBadgeCategory = currentBadgeCategory;
+        this.route = route;
+        this.book = book;
+        this.pointsAwarded = pointsAwarded;
+    }
 
     @Id
     @Column(name = "id")
@@ -26,11 +47,11 @@ public class BookRoute {
 
     @Basic
     @Column(name = "czy_pocz_kon")
-    public byte getIsFromStartToEnd() {
+    public boolean getIsFromStartToEnd() {
         return isFromStartToEnd;
     }
 
-    public void setIsFromStartToEnd(byte isFromStartToEnd) {
+    public void setIsFromStartToEnd(boolean isFromStartToEnd) {
         this.isFromStartToEnd = isFromStartToEnd;
     }
 
@@ -87,5 +108,27 @@ public class BookRoute {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    @Column(name = "przyznane_punkty")
+    public int getPointsAwarded() {
+        return pointsAwarded;
+    }
+
+    public void setPointsAwarded(int pointsAwarded) {
+        this.pointsAwarded = pointsAwarded;
+    }
+
+    @Override
+    public String toString() {
+        return "BookRoute{" +
+                "id=" + id +
+                ", isFromStartToEnd=" + isFromStartToEnd +
+                ", dateOfCompletion=" + dateOfCompletion +
+                ", currentBadgeCategory=" + currentBadgeCategory +
+                ", route=" + route +
+                ", book=" + book +
+                ", points=" + pointsAwarded +
+                '}';
     }
 }

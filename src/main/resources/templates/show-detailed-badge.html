@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/test.css">
+</head>
+<body>
+<header class="page-header">
+    <span id="title">eGOT PTTK</span>
+    <nav class="navigation-list">
+        <ul>
+            <li><a href="/trasy/show">Moja książeczka</a></li>
+            <li><a href="/trasy/showSummary">Podsumowanie odznak</a></li>
+            <li>adasda</li>
+            <li>asdsada</li>
+        </ul>
+    </nav>
+</header>
+<div class="main-content">
+    <div class="subpage-name"
+         th:text="'Podsumowanie zdobywania odznaki: ' + ${badgeToDisplay.getCategory().name}"></div>
+    <div class="current-badge-image-container">
+        <img th:src="'/stylesheets/images/odznakaPoziom'+${badgeToDisplay.getCategory().getHierarchyLevel()}+'.jpg'" />
+        <button id="addRouteButton" onclick="showPopupForm()">Generuj podsumowanie</button>
+    </div>
+
+    <div>
+        Trasy przebyte podczas zdobywania odznaki
+    </div>
+    <div>
+         <div id="routes-container">
+                <div id="table-wrapper">
+                    <table id="routes-from-user-book">
+                        <thead>
+                        <tr>
+                            <th>Z punktu</th>
+                            <th>Do punktu</th>
+                            <th>Data przejścia</th>
+                            <th>Punkty</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="route : ${routesCompletedUnderGivenBadge}">
+                            <tr>
+                                <td th:text="${route.isFromStartToEnd} ? ${route.route.startingPoint.name} : ${route.route.endPoint.name}"></td>
+                                <td th:text="${route.isFromStartToEnd} ? ${route.route.endPoint.name} : ${route.route.startingPoint.name}"></td>
+                                <td th:text="${route.dateOfCompletion}"></td>
+                                <td th:text="${route.pointsAwarded}"></td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </div>
+
+    <div>
+        Wycieczki przebyte podczas zdobywania odznaki:
+    </div>
+
+    <h5>Brak</h5>
+
+    <div id="popup-crud" class="outer-popup" style="display:none;">
+        <div class="middle-popup">
+            <div class="inner-popup" id="inner-popup-pdf">
+                <div class="close-popup" id="close-popup-pdf">+</div>
+                <!--<span id="popupMessage">Abcdeef</span>-->
+                <span id="pdf-form">
+                    <span id="pdf-form-title"> Które części podsumowania wygenerować do pliku?. </span>
+                    <form action="/trasy/getPdfSummaryCurrent">
+                        <ul>
+                            <li>
+                                <input id="first-check" type="checkbox" value="Opcja1" name="pdf-options" />
+                                <label for="first-check">przebyte trasy</label>
+                            </li>
+                            <li>
+                                <input id="second-check" type="checkbox" value="Opcja2" name="pdf-options" />
+                                <label for="second-check">przebyte wycieczki</label>
+                            </li>
+                            <li>
+                                <input id="third-check" type="checkbox" value="Opcja3" name="pdf-options" />
+                                <label for="third-check">stopień spełnienia warunków</label>
+                            </li>
+                            <li>
+                                <input id="fourth-check" type="checkbox" value="Opcja4" name="pdf-options" />
+                                <label for="fourth-check">lista tras do przebycia</label>
+                            </li>
+                        </ul>
+                        <input type="submit" value="Generuj do PDF" />
+                    </form>
+                </span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+            <a th:href="@{'/trasy/getPdfSummary?badgeId='+${badgeToDisplay.id}}">
+                Generuj podsumowanie do PDF.
+            </a>
+    </div>
+
+
+
+
+</div>
+
+<footer id="book-footer">Developed by MH</footer>
+</body>
+</html>
+
+<script>
+    function showPopupForm() {
+        var popup = document.getElementById("pdf-form");
+        popup.style.display = "block";
+        var popupCrud = document.getElementById("popup-crud");
+        popupCrud.style.display = "";
+        popupCrud.style.removeProperty("display");
+    }
+    document.querySelector('.close-popup').addEventListener("click", function () {
+        document.querySelector('.outer-popup').style.display = "none";
+    });
+</script>

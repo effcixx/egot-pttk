@@ -76,4 +76,15 @@ public class Point {
     public void setPointOwner(Tourist pointOwner) {
         this.pointOwner = pointOwner;
     }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", height='" + height + '\'' +
+                ", region=" + region +
+                ", pointOwner=" + pointOwner +
+                '}';
+    }
 }

@@ -1,0 +1,580 @@
+body{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: Tahoma, Verdana, Helvetica, sans-serif;
+}
+
+
+.bg-modal {
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.modal-contents {
+    height: 500px;
+    width: 800px;
+    background-color: white;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.close {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 42px;
+    color: #333;
+    transform: rotate(45deg);
+    cursor: pointer;
+}
+
+
+.routes-container{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 0;
+}
+ #routes-container{
+     position: relative;
+ }
+
+#routes-from-user-book{
+    width: 80%;
+    max-height: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    align-content: center;
+    text-align: center;
+    padding: 20px;
+    /*position: relative;*/
+}
+
+#routes-from-user-book thead{
+    background-color: white;
+}
+
+#routes-from-user-book tbody tr:nth-child(2n){
+    background-color: #e1e1e1;
+}
+
+
+.routes-from-user-book{
+    width: 80%;
+    height: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    align-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.routes-from-user-book thead{
+    background-color: white;
+}
+
+.routes-from-user-book tbody tr:nth-child(2n){
+    background-color: #e1e1e1;
+}
+
+.table-scroll tbody tr:nth-child(2n){
+    background-color: #e1e1e1;
+}
+.table-scroll{
+    height: 400px;
+}
+.predefined-route-container{
+    background-color: white;
+    overflow: auto;
+}
+.predefined-route-container table{
+    width: 100%;
+    height: 75%;
+}
+.predefined-route-container td:first-child{
+    width: 25%;
+}
+.predefined-route-container td:nth-child(2){
+    width: 25%;
+}
+
+.routeText{
+    width: 50%;
+}
+
+.directionText{
+    width: 15%;
+}
+
+.datePicker{
+    width: 25%;
+}
+
+.submitRouteButton{
+    width: 50%;
+    font-family: Tahoma, Verdana, Helvetica, sans-serif;
+    font-size: 1em;
+    font-weight: bolder;
+    background-color: #185fa8;
+    color: white;
+}
+
+.chooseRouteTypeButton{
+    width: 30%;
+    font-family: Tahoma, Verdana, Helvetica, sans-serif;
+    font-size: 1em;
+    font-weight: bolder;
+    background-color: white;
+    color: black;
+    border-width: 1px;
+    border-style: solid;
+    margin-bottom: 5px;
+}
+
+.route-form{
+    margin-top:15px;
+}
+
+.route-form input, option{
+    height: 25px;
+    font-size: 1em;
+    font-weight: bolder;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+}
+
+.route-form select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    height: 30px;
+    border-width: 1px;
+}
+
+.table-scroll table {
+    border-collapse: collapse;
+}
+.table-scroll table thead tr{
+    background-color: #185fa8;
+    color: white;
+    font-weight: bolder;
+}
+.table-scroll table tr:nth-child(2n){
+    background-color: #e1e1e1;
+}
+
+.outer-popup {
+    display: table;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    z-index: 15;
+}
+
+.middle-popup {
+    display: table-cell;
+    vertical-align: middle;
+    z-index: 15;
+}
+
+.inner-popup {
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    height: 150px;
+    line-height: 150px;
+    border: 2px solid #185fa8;
+    background-color: white;
+    border-radius: 10px;
+    position: relative;
+    text-align: center;
+    font-size: 1.5em;
+    z-index: 15;
+    /*whatever width you want*/
+}
+
+#inner-popup-pdf{
+    line-height: 10px;
+    height: 260px;
+}
+
+#pdf-form-title{
+    line-height: 22px;
+}
+
+
+#pdf-form{
+    margin-top: 20px;
+}
+
+#pdf-form input[type=submit]{
+    background-color: #185fa8;
+    color: white;
+    font-weight: bold;
+    width: 80%;
+}
+
+
+#inner-popup-pdf ul{
+    list-style-type: none;
+    text-align: left;
+}
+#inner-popup-pdf ul li{
+    padding-top: 10px;
+}
+
+.close-popup{
+    position: absolute;
+    top: -50px;
+    right: 10px;
+    font-size: 42px;
+    color: black;
+    transform: rotate(45deg);
+    cursor: pointer;
+    z-index: 15;
+}
+
+#close-popup-pdf{
+    top: 20px;
+}
+
+.current-badge-image-container{
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    align-content: center;
+    text-align: center;
+}
+
+.ui-datepicker {
+    width: 300px;
+    height: auto;
+    margin: 5px auto 0;
+    font: 9pt Arial, sans-serif;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+}
+.ui-datepicker a {
+    text-decoration: none;
+}
+.ui-datepicker table {
+    width: 100%;
+}
+.ui-datepicker-header{
+    background-color: #5776ff;
+    color: white;
+    text-align: center;
+    font-size: 1.3em;
+    height: 30px;
+}
+.ui-datepicker-title {
+    padding-top: 7px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-width: 1px;
+}
+
+.ui-datepicker-prev, .ui-datepicker-next {
+    display: inline-block;
+    width: 30px;
+    background-color: #5776ff;
+    height: 30px;
+    text-align: center;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    line-height: 600%;
+    overflow: hidden;
+}
+.ui-datepicker-prev, .ui-datepicker-next {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    cursor: pointer;
+    /*background-image: url("/stylesheets/images/arrow.png");*/
+
+    background-color: #5776ff;
+    background-repeat: no-repeat;
+    line-height: 600%;
+    overflow: hidden;
+    z-index: 900 !important;
+}
+.ui-datepicker-prev {
+    float: left;
+    background-position: center -30px;
+}
+.ui-datepicker-next {
+    float: right;
+    background-position: center 0px;
+}
+
+.ui-datepicker th{
+    color: #c6c6f5;
+}
+
+.ui-datepicker tbody td {
+    padding: 0;
+    background-color: aliceblue;
+}
+
+.ui-datepicker td span, .ui-datepicker td a {
+    display: inline-block;
+    font-weight: bold;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: #666666;
+    text-shadow: 1px 1px 0 #fff;
+    filter: dropshadow(color=#fff, offx=1, offy=1);
+}
+.ui-datepicker-unselectable .ui-state-default {
+    color: #b4b3b3;
+}
+.ui-datepicker-calendar .ui-state-hover {
+    background: #d1d0f7;
+    font-size: 1.1em;
+}
+
+.choose-route-button{
+    width: 80px;
+    background: #185fa8;
+    color: white;
+    font-weight: bold;
+    border-style: none;
+}
+
+
+#info-about-book{
+    width: 250px;
+    margin-left: 70%;
+    text-align: right;
+}
+
+#info-about-book button{
+    margin: 0;
+}
+
+#info-points{
+    font-size: 1.2em;
+}
+
+#number-of-points{
+    font-size: 1.4em;
+}
+
+#addRouteButton{
+    width: 100%;
+    font-family: Tahoma, Verdana, Helvetica, sans-serif;
+    font-size: 1em;
+    font-weight: bolder;
+    background-color: #185fa8;
+    color: white;
+    z-index: 100;
+    margin-bottom: 30px;
+}
+
+
+
+
+.page-header{
+    font-family: Helvetica, Tahoma, Verdana, sans-serif;
+    padding-bottom: 25px;
+    padding-top: 25px;
+    height: 60px;
+    background-image: linear-gradient(rgba(15, 58, 104, 0.75), rgba(15, 58, 104, 0.25));
+
+}
+.page-header span{
+    font-size: 300%;
+    color: white;
+    padding-left: 50px;
+    font-weight: bolder;
+}
+
+html{
+    background: url("/stylesheets/images/mountain.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    /*background-color: rgba(87, 118, 255, 0.31);*/
+}
+.main-content{
+    margin-left: 8%;
+    margin-right: 8%;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.subpage-name{
+    margin: -10px;
+    font-size: 170%;
+    padding-left: 25px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-weight: bold;
+    font-family: Tahoma, Arial, sans-serif;
+    /*border-bottom-right-radius: 10px;*/
+    /*background-color: rgba(24, 95, 168, 0.1);*/
+    /*border: 2px #185fa8;*/
+    /*border-right-style: solid;*/
+    /*border-bottom-style: solid;*/
+}
+
+#book-footer{
+    height: 80px;
+    text-align: center;
+    padding-top: 35px;
+    color: #b6b6b6;
+}
+
+#title{
+    float: left;
+}
+
+.navigation-list{
+    float: right;
+}
+.navigation-list a{
+    color:white;
+}
+.navigation-list a:hover{
+    color: rgb(204, 255, 188);
+}
+nav.navigation-list ul li{
+    padding: 0px 3.4em 0.2em 0.5em;
+    display: inline;
+    font-family: "Avenir", Helvetica, sans-serif;
+    color: white;
+    font-weight: bold;
+}
+
+.badge-summary{
+    text-align: center;
+    align-content: center;
+    font-size: 1.1em;
+}
+
+
+
+#routes-from-user-book tbody tr:nth-child(2n){
+    background-color: rgba(24, 95, 168, 0.21);
+}
+
+#routes-from-user-book tbody thead{
+    border-width: 0;
+    padding: 5px;
+}
+
+.table-scroll{
+    height: 400px;
+}
+.predefined-route-container{
+    background-color: white;
+    overflow: auto;
+}
+.predefined-route-container table{
+    width: 100%;
+    height: 75%;
+}
+.predefined-route-container td:first-child{
+    width: 25%;
+}
+.predefined-route-container td:nth-child(2){
+    width: 25%;
+}
+
+
+.bg-modal {
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    margin-left: -113px;
+}
+
+.bg-modal table {
+    text-align: center;
+    align-items: center;
+}
+
+#past-routes{
+    font-size: 1.5em;
+    padding-left: 25px;
+}
+
+
+
+
+
+
+#subtitle-summary{
+    padding-left: 15px;
+    padding-top: 0;
+    font-size: 1.1em;
+}
+
+.available-badge{
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.old-badge-image{
+    width: 170px;
+    height: 225px;
+}
+
+.badges-container{
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+}
+
+.badges-container img{
+    padding-bottom: 10px;
+}
+
+.badges-container img:hover{
+    transform: scale(1.05, 1.05);
+}
+
+.current-badge-image{
+    opacity: 0.7;
+    width: 170px;
+    height: 225px;
+}

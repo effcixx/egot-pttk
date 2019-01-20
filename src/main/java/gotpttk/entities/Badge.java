@@ -12,6 +12,15 @@ public class Badge {
     private Category category;
     private Tourist owner;
 
+    public Badge() {
+    }
+
+    public Badge(Date achievingDate, Category category, Tourist owner) {
+        this.achievingDate = achievingDate;
+        this.category = category;
+        this.owner = owner;
+    }
+
     @Id
     @Column(name = "id")
     public int getId() {
@@ -64,5 +73,15 @@ public class Badge {
 
     public void setOwner(Tourist owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public String toString() {
+        return "Badge{" +
+                "id=" + id +
+                ", achievingDate=" + achievingDate +
+                ", category=" + category +
+                ", owner=" + owner +
+                '}';
     }
 }

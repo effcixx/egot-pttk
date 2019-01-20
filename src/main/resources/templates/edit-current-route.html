@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form method="post" th:action="@{/admin/saveRoute}" >
+    <input th:object="${currentRoute}" th:name="id" th:type="hidden" th:value="${currentRoute.id}"  />
+    <input th:object="${currentStartPoint}" th:name="id" th:type="hidden"  th:field="${currentStartPoint.id}"  />
+    <input th:object="${currentEndPoint}" th:name="id" th:type="hidden"  th:field="${currentEndPoint.id}"  />
+    <!--<input th:name="idE" th:type="hidden" th:value="${currentRoute.endPoint.id}" />-->
+    <!--<input th:type="hidden" th:name="idStartPoint" th:value="${currentRoute.startingPoint.id}" />-->
+    <!--<input th:name="endPoint" th:type="hidden" th:value="*{currentRoute.getEndPoint()}"/>-->
+    <!--<input th:name="routeOwner" th:type="hidden" th:value="*{currentRoute.getRouteOwner()}"/>-->
+    <label>
+        <input th:object="${currentRoute}" type="text" name="rangeName" th:value="*{getStartingPoint().getRegion().getRange().getName()}" disabled/>
+    </label>
+    <label>
+        <input th:object="${currentRoute}"type="text" name="regionName" th:value="*{getStartingPoint().getRegion().getName()}" disabled/>
+    </label>
+    <label>
+        <input th:object="${currentStartPoint}" type="text" name="startPointName"  th:value="*{getName()}" disabled/>
+    </label>
+    <label>
+        <input th:object="${currentStartPoint}" type="text" name="height" th:field="*{height}"/>
+    </label>
+    <label>
+        <input th:object="${currentRoute}" type="text" name="endPointName" th:value="*{getEndPoint().getName()}" disabled/>
+    </label>
+    <label>
+        <input th:object="${currentEndPoint}" type="text" name="height" th:field="*{height}"/>
+    </label>
+    <label>
+        <input th:object="${currentRoute}" type="text" name="pointsStartToEnd" th:value="*{getPointsStartToEnd()}" />
+    </label>
+    <label>
+        <input th:object="${currentRoute}" type="text" name="pointsEndToStart" th:value="*{getPointsEndToStart()}"/>
+    </label>
+    <input type="submit" value="Zapisz zmiany"/>
+    <input type="button" value="Odrzuć zmiany"/>
+</form>
+
+
+</body>
+</html>

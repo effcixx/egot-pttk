@@ -54,4 +54,13 @@ public class Category {
     public int hashCode() {
         return Objects.hash(id, hierarchyLevel, name);
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", hierarchyLevel=" + hierarchyLevel +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

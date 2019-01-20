@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .ui-datepicker{
+            width: 450px;
+            height: auto;
+            margin: 5px auto 0;
+            font: 9pt Arial, sans-serif;
+            -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+            -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+        }
+    </style>
+</head>
+<body onload="onLoad()">
+<button id="predefined-route"
+        onclick="changeVisibilityOfContainer('predefined-route-container', 'user-route-container')">Trasa punktowana</button>
+<button id="users-route" onclick="changeVisibilityOfContainer('user-route-container', 'predefined-route-container')">Trasa niepunktowana</button>
+
+<div th:object="${bookRouteWrapper}" id="predefined-route-container" style="display: none">
+    <table>
+        <thead>
+        <tr>
+            <th>Trasa</th>
+            <th>Region</th>
+            <th>Punktacja</th>
+            <th>Punktacja (rev)</th>
+            <th>Wybierz!</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="route : ${publicRoutes}">
+            <tr>
+                <td th:text="${route.startingPoint.name} + ' - ' + ${route.endPoint.name}"></td>
+                <td th:text="${route.startingPoint.region.name}"></td>
+                <td th:text="${route.pointsStartToEnd}"></td>
+                <td th:text="${route.pointsEndToStart}"></td>
+                <td>
+                    <button th:data-thing="${route.showRoute()}"
+                            th:data-id="${route.id}"
+                            onclick="updateForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">click
+                    </button>
+
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+    <form id="public-route-form" style="display: none"
+          onsubmit="if(!confirm('Czy potwierdzasz dodanie do książeczki?')){return false;}"
+          method="post" action="/trasy/submitRoute" th:object="${bookRouteWrapper}">
+        <label for="route"><input type="text" id="route" name="route" disabled /></label>
+        <label for="date"><input type="date" id="date" name="date" class="datePicker" th:field="*{dateOfCompletion}" required/></label>
+        <span th:if="${#fields.hasErrors('dateOfCompletion')}" th:errors="*{dateOfCompletion}"></span>
+        <br/>
+        <label for="direction">
+            <select th:field="*{isFromStartToEnd}" id="direction" name="direction">
+                <option th:value="true">Wprzód</option>
+                <option th:value="false">Od końca</option>
+            </select>
+        </label>
+        <label><input type="text" id="chosenRouteId" name="chosenRouteId" th:field="*{chosenRouteId}"/></label>
+        <label><input type="submit" id="submitButton" value="Dodaj trasę" /></label>
+    </form>
+</div>
+
+<div id="user-route-container" style="display: none">
+    <table>
+        <thead>
+        <tr>
+            <th>Trasa</th>
+            <th>Region</th>
+            <th>Punktacja</th>
+            <th>Punktacja (rev)</th>
+            <th>Wybierz!</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="route : ${userRoutes}">
+            <tr>
+                <td th:text="${route.startingPoint.name} + ' - ' + ${route.endPoint.name}"></td>
+                <td th:text="${route.startingPoint.region.name}"></td>
+                <td th:text="${route.pointsStartToEnd}"></td>
+                <td th:text="${route.pointsEndToStart}"></td>
+                <td>
+                    <button th:data-thing="${route.showRoute()}"
+                            th:data-id="${route.id}"
+                            onclick="updateSecondForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">click
+                    </button>
+
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+    <form id="user-route-form" style="display: none"
+          onsubmit="if(!confirm('Czy potwierdzasz dodanie do książeczki?')){return false;}"
+          method="post" action="/trasy/submitRoute" th:object="${bookRouteWrapper}">
+        <label for="route"><input type="text" id="userRoute" name="route" disabled /></label>
+        <label for="direction">
+            <select th:field="*{isFromStartToEnd}" id="userRouteDirection" name="direction">
+                <option value="true">Wprzód</option>
+                <option value="false">Od końca</option>
+            </select>
+        </label>
+        <label for="date"><input type="date" id="userRouteDate" name="date" class="datePicker" th:field="*{dateOfCompletion}"
+                                 required/></label>
+        <br/>
+        <label><input type="text" id="chosenUserRouteId" name="chosenRouteId" th:field="*{chosenRouteId}"/></label>
+        <label><input type="submit" id="submitUserRouteButton" value="Dodaj trasę" /></label>
+    </form>
+</div>
+<div id="test">A</div>
+<p>Data: <input type="text" id="dateTest"/></p>
+</body>
+</html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    function onLoad(){
+        var today = new Date().toISOString().split('T')[0];
+        var dateInputs = document.getElementsByClassName("datePicker");
+        for (var i=0; i<dateInputs.length; i++){
+            dateInputs[i].setAttribute('max', today);
+        }
+    }
+
+    $(function () {
+        $("#date").datepicker({
+            inline: true,
+            showOtherMonths: true,
+            dayNamesMin: ['N', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'S'],
+            maxDate: 0
+        });
+    });
+    $(function () {
+        $("#userRouteDate").datepicker({
+            inline: true,
+            showOtherMonths: true,
+            dayNamesMin: ['N', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'S'],
+            maxDate: 0
+        });
+    });
+
+    function updateForm(name, id){
+        document.getElementById("public-route-form").style.display = "block";
+        var routeNameInput = document.getElementById("route");
+        routeNameInput.value = name;
+        document.getElementById("chosenRouteId").value = id;
+    }
+
+    function updateSecondForm(name, id){
+        document.getElementById("user-route-form").style.display = "block";
+        var routeNameInput = document.getElementById("userRoute");
+        routeNameInput.value = name;
+        document.getElementById("chosenUserRouteId").value = id;
+    }
+
+    function changeVisibilityOfContainer(containerId, otherContainerId){
+        var container = document.getElementById(containerId);
+        var currentStyleDisplay = container.style.display;
+        var otherContainer = document.getElementById(otherContainerId);
+        otherContainer.style.display = "none";
+
+        container.style.display = currentStyleDisplay === "none" ? "block" : "none";
+    }
+
+
+    // $(function () {
+    //     $("#submitButton").click(
+    //         function () {
+    //             var
+    //         }
+    //     )
+    // })
+
+
+    // $(function () {
+    //     $("#date").datepicker({
+    //         maxDate: new Date()
+    //     })
+    // });
+    // $(function () {
+    //     var trigger = $("#butt"), container = $("#form-container");
+    //     trigger.on('click', function () {
+    //         container.load('/trasy/fakeForm');
+    //         return false;
+    //     })
+    // })
+</script>
