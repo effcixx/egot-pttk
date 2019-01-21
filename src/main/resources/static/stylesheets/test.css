@@ -578,3 +578,16 @@ nav.navigation-list ul li{
     width: 170px;
     height: 225px;
 }
+
+.summary-subtitle{
+    background-color: rgba(24, 95, 168, 0.10);
+    /* border-style: solid; */
+    border-width: 0;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    width: 50%;
+    margin-left: -10px;
+    font-size: 1.3em;
+    padding-left: 5px;
+}

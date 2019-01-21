@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 
+@SuppressWarnings("deprecation")
 @Component
 public class ValidatorWGory extends Validator {
 
@@ -40,6 +41,10 @@ public class ValidatorWGory extends Validator {
         Tourist owner = book.getOwner();
         System.out.println("Masz punktow : " + bookService.getCurrentNumberOfPoints(book.getOwner().getId()));
         System.out.println("Jestes na poziomie: " + badgeLevel.name());
+        var lastBadge = badgeService.getLastBadgeScored(1);
+        if (lastBadge != null && lastBadge.getAchievingDate().getYear() == new java.util.Date().getYear()){
+            return;
+        }
         if (badgeLevel == BadgeLevel.BRAZOWY){
             if (currentNumberOfPoints >= BRONZE_SETPOINT){
                 saveBadge(owner);
@@ -73,8 +78,13 @@ public class ValidatorWGory extends Validator {
         else if (badgeLevel == BadgeLevel.ZLOTY){
             necessaryPoints = GOLD_SETPOINT;
         }
-        return "Minimum: " + necessaryPoints + " pkt. - brakuje Ci " + (necessaryPoints-currentPoints) +
+        String message =  "Minimum: " + necessaryPoints + " pkt. - brakuje Ci " + (necessaryPoints-currentPoints) +
                 " pkt. (obecnie: " + currentPoints + " pkt.)";
+        var lastBadge = badgeService.getLastBadgeScored(userId);
+        if (lastBadge != null && lastBadge.getAchievingDate().getYear()==new java.util.Date().getYear()){
+            message += "\nOdznake mozesz otrzymac najwczesniej w przyszlym roku.";
+        }
+        return message;
     }
 
     private void saveBadge(Tourist owner) {

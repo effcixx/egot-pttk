@@ -104,8 +104,8 @@
         <ul>
             <li><a href="/trasy/show">Moja książeczka</a></li>
             <li><a href="/trasy/showSummary">Podsumowanie odznak</a></li>
-            <li>adasda</li>
-            <li>asdsada</li>
+            <li>Kontakt</li>
+            <li>Wyloguj</li>
         </ul>
     </nav>
 </header>
@@ -144,9 +144,11 @@
     <!--</div>-->
     <!--</div>-->
 
+    <h4>Trasy przebyte w ramach aktualnie zdobywanej odznaki: </h4>
     <th:block th:each="entry : ${badgeRouteMap}">
-        <p th:text="'Trasy przebyte podczas zdobywania odznaki: ' + ${entry.getKey().getCategory().name}+
-    ', zdobytej: ' + ${entry.getKey().getAchievingDate()}"></p>
+        <h5 th:if="${entry.getKey().getOwner() != null}"
+                th:text="'Trasy przebyte podczas zdobywania odznaki: ' + ${entry.getKey().getCategory().name}+
+    ', zdobytej: ' + ${entry.getKey().getAchievingDate()}"></h5>
         <div id="routes-container">
             <div id="table-wrapper">
                 <table id="routes-from-user-book">
@@ -188,8 +190,8 @@
     <div class="bg-modal">
         <div class="modal-contents">
             <button id="predefined-route" class="chooseRouteTypeButton"
-                    onclick="changeVisibilityOfContainer('large-route-container', 'large-user-route-container')">Trasa punktowana</button>
-            <button id="users-route" class="chooseRouteTypeButton" onclick="changeVisibilityOfContainer('large-user-route-container', 'large-route-container')">Trasa niepunktowana</button>
+                    onclick="changeVisibilityOfContainer('large-route-container', 'large-user-route-container', 'niepunktowana')">Trasa punktowana</button>
+            <button id="users-route" class="chooseRouteTypeButton" onclick="changeVisibilityOfContainer('large-user-route-container', 'large-route-container', 'punktowana')">Trasa niepunktowana</button>
             <div class="close">+</div>
 
             <div id="large-route-container" class="large-route-container" style="display: none">
@@ -201,7 +203,7 @@
                                 <th>Trasa</th>
                                 <th>Region</th>
                                 <th>Punktacja</th>
-                                <th>Punktacja (rev)</th>
+                                <th>Punktacja (od końca)</th>
                                 <th>Wybierz!</th>
                             </tr>
                             </thead>
@@ -216,7 +218,7 @@
                                         <button class="choose-route-button"
                                                 th:data-thing="${route.showRoute()}"
                                                 th:data-id="${route.id}"
-                                                onclick="updateForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">click
+                                                onclick="updateForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">wybierz
                                         </button>
                                     </td>
                                 </tr>
@@ -231,7 +233,7 @@
                     <label for="route"><input type="text" id="route" name="route" class="routeText" disabled /></label>
                     <label for="direction">
                         <select th:field="*{isFromStartToEnd}" id="direction" name="direction" class="directionText">
-                            <option th:value="true" selected>Wprzód</option>
+                            <option th:value="true" >Wprzód</option>
                             <option th:value="false">Od końca</option>
                         </select>
                     </label>
@@ -252,7 +254,7 @@
                                 <th>Trasa</th>
                                 <th>Region</th>
                                 <th>Punktacja</th>
-                                <th>Punktacja (rev)</th>
+                                <th>Punktacja (od końca)</th>
                                 <th>Wybierz!</th>
                             </tr>
                             </thead>
@@ -266,7 +268,7 @@
                                     <td>
                                         <button class="choose-route-button"
                                                 th:data-thing="${route.showRoute()}" th:data-id="${route.id}"
-                                                onclick="updateSecondForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">click
+                                                onclick="updateSecondForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">wybierz
                                         </button>
 
                                     </td>
@@ -283,7 +285,7 @@
                     <label for="route"><input type="text" id="userRoute" class="routeText" name="route" disabled /></label>
                     <label for="direction">
                         <select th:field="*{isFromStartToEnd}" id="userRouteDirection" class="directionText" name="direction">
-                            <option value="true">Wprzód</option>
+                            <option value="true" selected>Wprzód</option>
                             <option value="false">Od końca</option>
                         </select>
                     </label>
@@ -345,7 +347,8 @@
             dayNamesMin: ['N', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'S'],
             monthNames: ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień",
                 "Wrzesień", "Październik", "Listopad", "Grudzień"],
-            maxDate: 0
+            maxDate: 0,
+            dateFormat: 'dd-mm-yy'
         });
     });
 
@@ -361,7 +364,8 @@
             dayNamesMin: ['N', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'S'],
             monthNames: ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień",
                 "Wrzesień", "Październik", "Listopad", "Grudzień"],
-            maxDate: 0
+            maxDate: 0,
+            dateFormat: 'dd-mm-yy'
         });
     });
 
@@ -377,7 +381,8 @@
             dayNamesMin: ['N', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'S'],
             monthNames: ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień",
                 "Wrzesień", "Październik", "Listopad", "Grudzień"],
-            maxDate: 0
+            maxDate: 0,
+            dateFormat: 'dd-mm-yy'
         });
     });
 
@@ -395,12 +400,27 @@
         document.getElementById("chosenUserRouteId").value = id;
     }
 
-    function changeVisibilityOfContainer(containerId, otherContainerId){
+    function changeVisibilityOfContainer(containerId, otherContainerId, other){
         var container = document.getElementById(containerId);
         var currentStyleDisplay = container.style.display;
         var otherContainer = document.getElementById(otherContainerId);
         otherContainer.style.display = "none";
 
         container.style.display = currentStyleDisplay === "none" ? "block" : "none";
+        var buttonPublic = document.getElementById("predefined-route");
+        var buttonPrivate = document.getElementById("users-route");
+        if (other === 'niepunktowana'){
+            buttonPublic.style.backgroundColor = "#185fa8";
+            buttonPublic.style.color = "white";
+            buttonPrivate.style.backgroundColor = "white";
+            buttonPrivate.style.color = "black";
+        }
+        else{
+            buttonPrivate.style.backgroundColor = "#185fa8";
+            buttonPrivate.style.color = "white";
+            buttonPublic.style.backgroundColor = "white";
+            buttonPublic.style.color = "black";
+
+        }
     }
 </script>

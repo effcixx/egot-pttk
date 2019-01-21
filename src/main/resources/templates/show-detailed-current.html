@@ -12,8 +12,8 @@
         <ul>
             <li><a href="/trasy/show">Moja książeczka</a></li>
             <li><a href="/trasy/showSummary">Podsumowanie odznak</a></li>
-            <li>adasda</li>
-            <li>asdsada</li>
+            <li>Kontakt</li>
+            <li>Wyloguj</li>
         </ul>
     </nav>
 </header>
@@ -26,7 +26,7 @@
         <button id="addRouteButton" onclick="showPopupForm()">Generuj podsumowanie</button>
     </div>
 
-    <div>
+    <div class="summary-subtitle">
         Trasy przebyte podczas zdobywania odznaki
     </div>
     <div>
@@ -56,7 +56,7 @@
         </div>
     </div>
 
-    <div>
+    <div class="summary-subtitle">
         Wycieczki przebyte podczas zdobywania odznaki:
     </div>
 
@@ -81,10 +81,10 @@
                                 <input id="third-check" type="checkbox" value="Opcja3" th:field="*{optionWrapper.option3}" name="pdf-options" />
                                 <label for="third-check" th:text="${optionWrapper.getDescription3()}"></label>
                             </li>
-                            <li>
-                                <input id="fourth-check" type="checkbox" value="Opcja4" th:field="*{optionWrapper.option4}" name="pdf-options" />
-                                <label for="fourth-check" th:text="${optionWrapper.getDescription4()}"></label>
-                            </li>
+                            <!--<li>-->
+                                <!--<input id="fourth-check" type="checkbox" value="Opcja4" th:field="*{optionWrapper.option4}" name="pdf-options" />-->
+                                <!--<label for="fourth-check" th:text="${optionWrapper.getDescription4()}"></label>-->
+                            <!--</li>-->
                         </ul>
                         <input type="submit" value="Generuj do PDF" />
                     </form>
@@ -94,12 +94,14 @@
         </div>
     </div>
 
-    <h5>Brak</h5>
+    <h5>Podczas zdobywania tej odznaki, nie przebyto żadnej wycieczki</h5>
 
-    <div>
+    <div class="summary-subtitle">
         Stopień spełnienia warunków do zdobycia odznaki
     </div>
-    <div th:text="${summaryString}"></div>
+
+
+    <h5><div th:text="${summaryString}"></div></h5>
     <!--<div>-->
         <!--<a th:href="@{'/trasy/getPdfSummaryCurrent'}">-->
             <!--Generuj podsumowanie do PDF.-->

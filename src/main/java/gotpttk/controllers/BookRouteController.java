@@ -196,12 +196,12 @@ public class BookRouteController {
         private String option1;
         private String option2;
         private String option3;
-        private String option4;
+        //private String option4;
 
         private static String DESCRIPTION_1 = "przebyte trasy";
         private static String DESCRIPTION_2 = "przebyte wycieczki";
         private static String DESCRIPTION_3 = "stopień spełnienia warunków";
-        private static String DESCRIPTION_4 = "lista tras do przebycia";
+        //private static String DESCRIPTION_4 = "lista tras do przebycia";
 
 
         public PdfOptionWrapper() {
@@ -219,9 +219,9 @@ public class BookRouteController {
             return DESCRIPTION_3;
         }
 
-        public static String getDescription4() {
-            return DESCRIPTION_4;
-        }
+//        public static String getDescription4() {
+//            return DESCRIPTION_4;
+//        }
 
         public String getOption1() {
             return option1;
@@ -247,13 +247,13 @@ public class BookRouteController {
             this.option3 = option3;
         }
 
-        public String getOption4() {
-            return option4;
-        }
+//        public String getOption4() {
+//            return option4;
+//        }
 
-        public void setOption4(String option4) {
-            this.option4 = option4;
-        }
+//        public void setOption4(String option4) {
+//            this.option4 = option4;
+//        }
 
         @Override
         public String toString() {
@@ -261,7 +261,7 @@ public class BookRouteController {
                     "option1='" + option1 + '\'' +
                     ", option2='" + option2 + '\'' +
                     ", option3='" + option3 + '\'' +
-                    ", option4='" + option4 + '\'' +
+                   // ", option4='" + option4 + '\'' +
                     '}';
         }
     }
@@ -272,6 +272,7 @@ public class BookRouteController {
         var book = bookService.getBookWithUserId(userId);
         var currentBadgeCategory = categoryService.getCategoryOfCurrentBadge(userId);
         var routes = bookRouteService.readRoutesUnderCurrentBadge(userId);
+        routes.sort(new BookRouteComparator());
         var summary = validatorManager.getSummaryOfProcess(book);
         model.addAttribute("currentBadgeCategory", currentBadgeCategory);
         model.addAttribute("routes", routes);
@@ -344,10 +345,10 @@ public class BookRouteController {
             System.out.println("Trzeciaja");
             pdfCreator.setShouldGenerateSummary(true);
         }
-        if (optionWrapper.getOption4() != null){
-            System.out.println("Czwartaja");
-            pdfCreator.setShouldGenerateRemainingRoutes(true);
-        }
+//        if (optionWrapper.getOption4() != null){
+//            System.out.println("Czwartaja");
+//            pdfCreator.setShouldGenerateRemainingRoutes(true);
+//        }
         return getResponseEntityPdf(headers);
     }
 //    @GetMapping("/getPdfSummaryCurrent")
@@ -391,10 +392,10 @@ public class BookRouteController {
             System.out.println("Thirdy");
             pdfCreator.setShouldGenerateSummary(true);
         }
-        if (optionWrapper.getOption4() != null){
-            System.out.println("Fourthy");
-            pdfCreator.setShouldGenerateRemainingRoutes(true);
-        }
+//        if (optionWrapper.getOption4() != null){
+//            System.out.println("Fourthy");
+//            pdfCreator.setShouldGenerateRemainingRoutes(true);
+//        }
         return getResponseEntityPdf(headers);
     }
 
@@ -508,7 +509,8 @@ public class BookRouteController {
         private boolean isFromStartToEnd;
 
         @NotNull
-        @DateTimeFormat(pattern = "MM/dd/yyyy")
+        //@DateTimeFormat(pattern = "MM/dd/yyyy")
+        @DateTimeFormat(pattern = "dd-MM-yyyy")
         @PastOrPresent
         private java.util.Date dateOfCompletion;
 
