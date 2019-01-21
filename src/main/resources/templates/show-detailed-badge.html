@@ -68,24 +68,17 @@
                 <!--<span id="popupMessage">Abcdeef</span>-->
                 <span id="pdf-form">
                     <span id="pdf-form-title"> Które części podsumowania wygenerować do pliku?. </span>
-                    <form action="/trasy/getPdfSummaryCurrent">
+                    <form action="/trasy/getPdfSummary" method="post">
                         <ul>
                             <li>
-                                <input id="first-check" type="checkbox" value="Opcja1" name="pdf-options" />
-                                <label for="first-check">przebyte trasy</label>
+                                <input id="first-check" type="checkbox" value="Opcja1" th:field="*{optionWrapper.option1}" name="pdf-options" />
+                                <label for="first-check" th:text="${optionWrapper.getDescription1()}"></label>
                             </li>
                             <li>
-                                <input id="second-check" type="checkbox" value="Opcja2" name="pdf-options" />
-                                <label for="second-check">przebyte wycieczki</label>
+                                <input id="second-check" type="checkbox" value="Opcja2" th:field="*{optionWrapper.option2}" name="pdf-options" />
+                                <label for="second-check" th:text="${optionWrapper.getDescription2()}"></label>
                             </li>
-                            <li>
-                                <input id="third-check" type="checkbox" value="Opcja3" name="pdf-options" />
-                                <label for="third-check">stopień spełnienia warunków</label>
-                            </li>
-                            <li>
-                                <input id="fourth-check" type="checkbox" value="Opcja4" name="pdf-options" />
-                                <label for="fourth-check">lista tras do przebycia</label>
-                            </li>
+                            <input type="hidden" id="badge-id" th:value="${badgeToDisplay.id}" />
                         </ul>
                         <input type="submit" value="Generuj do PDF" />
                     </form>
@@ -95,11 +88,11 @@
         </div>
     </div>
 
-    <div>
-            <a th:href="@{'/trasy/getPdfSummary?badgeId='+${badgeToDisplay.id}}">
-                Generuj podsumowanie do PDF.
-            </a>
-    </div>
+    <!--<div>-->
+            <!--<a th:href="@{'/trasy/getPdfSummary?badgeId='+${badgeToDisplay.id}}">-->
+                <!--Generuj podsumowanie do PDF.-->
+            <!--</a>-->
+    <!--</div>-->
 
 
 

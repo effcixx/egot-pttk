@@ -180,6 +180,8 @@ public class BookRouteController {
         model.addAttribute("badgeToDisplay", badgeToDisplay);
         model.addAttribute("currentBadgeCategory", currentBadgeCategory);
         model.addAttribute("routesCompletedUnderGivenBadge", routesCompletedUnderGivenBadge);
+        var list = new String[4];
+        model.addAttribute("optionWrapper", new PdfOptionWrapper());
         for (var b : routesCompletedUnderGivenBadge){
             System.out.println(b.getDateOfCompletion() +": " + b.getRoute().getStartingPoint().getName()
                     + " - " + b.getRoute().getEndPoint().getName());
@@ -188,6 +190,80 @@ public class BookRouteController {
         System.out.println(badgeToDisplay);
         System.out.println("%%%%%%");
         return "show-detailed-badge";
+    }
+
+    private static class PdfOptionWrapper{
+        private String option1;
+        private String option2;
+        private String option3;
+        private String option4;
+
+        private static String DESCRIPTION_1 = "przebyte trasy";
+        private static String DESCRIPTION_2 = "przebyte wycieczki";
+        private static String DESCRIPTION_3 = "stopień spełnienia warunków";
+        private static String DESCRIPTION_4 = "lista tras do przebycia";
+
+
+        public PdfOptionWrapper() {
+        }
+
+        public static String getDescription1() {
+            return DESCRIPTION_1;
+        }
+
+        public static String getDescription2() {
+            return DESCRIPTION_2;
+        }
+
+        public static String getDescription3() {
+            return DESCRIPTION_3;
+        }
+
+        public static String getDescription4() {
+            return DESCRIPTION_4;
+        }
+
+        public String getOption1() {
+            return option1;
+        }
+
+        public void setOption1(String option1) {
+            this.option1 = option1;
+        }
+
+        public String getOption2() {
+            return option2;
+        }
+
+        public void setOption2(String option2) {
+            this.option2 = option2;
+        }
+
+        public String getOption3() {
+            return option3;
+        }
+
+        public void setOption3(String option3) {
+            this.option3 = option3;
+        }
+
+        public String getOption4() {
+            return option4;
+        }
+
+        public void setOption4(String option4) {
+            this.option4 = option4;
+        }
+
+        @Override
+        public String toString() {
+            return "PdfOptionWrapper{" +
+                    "option1='" + option1 + '\'' +
+                    ", option2='" + option2 + '\'' +
+                    ", option3='" + option3 + '\'' +
+                    ", option4='" + option4 + '\'' +
+                    '}';
+        }
     }
 
     @RequestMapping("/showDetailedCurrent")
@@ -200,6 +276,7 @@ public class BookRouteController {
         model.addAttribute("currentBadgeCategory", currentBadgeCategory);
         model.addAttribute("routes", routes);
         model.addAttribute("summaryString", summary);
+        model.addAttribute("optionWrapper", new PdfOptionWrapper());
         System.out.println("Podsumowanie: " + summary);
         return "show-detailed-current";
     }
@@ -228,31 +305,96 @@ public class BookRouteController {
 //        return path;
 //    }
 
-    @GetMapping("/getPdfSummary")
-    public ResponseEntity<byte[]> showGeneratedPdf(@RequestParam int badgeId) throws IOException {
+//    @GetMapping("/getPdfSummary")
+//    public ResponseEntity<byte[]> showGeneratedPdf(@RequestParam int badgeId) throws IOException {
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.parseMediaType("application/pdf"));
+//        var badge = badgeService.readById(badgeId);
+//        var routes = readRoutesCompletedUnderGivenBadge(badge, 1);
+//        pdfCreator.setCategory(badge.getCategory());
+//        pdfCreator.setBookRoutes(routes);
+//        pdfCreator.setExcursions(null);
+//        pdfCreator.setAchieved(true);
+//        return getResponseEntityPdf(headers);
+//    }
+
+    @PostMapping("/getPdfSummary")
+    public ResponseEntity<byte[]> showGeneratedPdfWithRestrictions
+                        (@ModelAttribute PdfOptionWrapper optionWrapper) throws IOException {
+        System.out.println("POST");
+        System.out.println(optionWrapper);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType("application/pdf"));
-        var badge = badgeService.readById(badgeId);
+        var badge = badgeService.readById(8);
         var routes = readRoutesCompletedUnderGivenBadge(badge, 1);
+        pdfCreator.reset();
         pdfCreator.setCategory(badge.getCategory());
         pdfCreator.setBookRoutes(routes);
         pdfCreator.setExcursions(null);
         pdfCreator.setAchieved(true);
+        if (optionWrapper.getOption1() != null){
+            System.out.println("Pierwaja");
+            pdfCreator.setShouldGenerateBookRoutes(true);
+        }
+        if (optionWrapper.getOption2() != null){
+            System.out.println("Drugaja");
+            pdfCreator.setShouldGenerateExcursions(true);
+        }
+        if (optionWrapper.getOption3() != null){
+            System.out.println("Trzeciaja");
+            pdfCreator.setShouldGenerateSummary(true);
+        }
+        if (optionWrapper.getOption4() != null){
+            System.out.println("Czwartaja");
+            pdfCreator.setShouldGenerateRemainingRoutes(true);
+        }
         return getResponseEntityPdf(headers);
     }
+//    @GetMapping("/getPdfSummaryCurrent")
+//    public ResponseEntity<byte[]> showGeneratedPdfForCurrent() throws IOException{
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.parseMediaType("application/pdf"));
+//        var category = categoryService.getCategoryOfCurrentBadge(1);
+//        var routes = bookRouteService.readRoutesUnderCurrentBadge(1);
+//        var book = bookService.getBookWithUserId(1);
+//        pdfCreator.setCategory(category);
+//        pdfCreator.setBookRoutes(routes);
+//        pdfCreator.setExcursions(null);
+//        pdfCreator.setAchieved(false);
+//        pdfCreator.setSummary(validatorManager.getSummaryOfProcess(book));
+//        return getResponseEntityPdf(headers);
+//    }
 
-    @RequestMapping("/getPdfSummaryCurrent")
-    public ResponseEntity<byte[]> showGeneratedPdfForCurrent() throws IOException{
+    @PostMapping("/getPdfSummaryCurrent")
+    public ResponseEntity<byte[]> showGeneratedPdfForCurrentWithRestrictions
+            (@ModelAttribute PdfOptionWrapper optionWrapper) throws IOException{
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType("application/pdf"));
         var category = categoryService.getCategoryOfCurrentBadge(1);
         var routes = bookRouteService.readRoutesUnderCurrentBadge(1);
         var book = bookService.getBookWithUserId(1);
+        pdfCreator.reset();
         pdfCreator.setCategory(category);
         pdfCreator.setBookRoutes(routes);
         pdfCreator.setExcursions(null);
         pdfCreator.setAchieved(false);
         pdfCreator.setSummary(validatorManager.getSummaryOfProcess(book));
+        if (optionWrapper.getOption1() != null){
+            System.out.println("Firsty");
+            pdfCreator.setShouldGenerateBookRoutes(true);
+        }
+        if (optionWrapper.getOption2() != null){
+            System.out.println("Secondy");
+            pdfCreator.setShouldGenerateExcursions(true);
+        }
+        if (optionWrapper.getOption3() != null){
+            System.out.println("Thirdy");
+            pdfCreator.setShouldGenerateSummary(true);
+        }
+        if (optionWrapper.getOption4() != null){
+            System.out.println("Fourthy");
+            pdfCreator.setShouldGenerateRemainingRoutes(true);
+        }
         return getResponseEntityPdf(headers);
     }
 

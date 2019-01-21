@@ -66,24 +66,24 @@
                 <div class="close-popup" id="close-popup-pdf">+</div>
                 <!--<span id="popupMessage">Abcdeef</span>-->
                 <span id="pdf-form">
-                    <span id="pdf-form-title"> Które części podsumowania wygenerować do pliku?. </span>
-                    <form action="/trasy/getPdfSummaryCurrent">
+                    <span id="pdf-form-title"> Które części podsumowania wygenerować do pliku? </span>
+                    <form action="/trasy/getPdfSummaryCurrent" method="post">
                         <ul>
                             <li>
-                                <input id="first-check" type="checkbox" value="Opcja1" name="pdf-options" />
-                                <label for="first-check">przebyte trasy</label>
+                                <input id="first-check" type="checkbox" value="Opcja1" th:field="*{optionWrapper.option1}" name="pdf-options" />
+                                <label for="first-check" th:text="${optionWrapper.getDescription1()}"></label>
                             </li>
                             <li>
-                                <input id="second-check" type="checkbox" value="Opcja2" name="pdf-options" />
-                                <label for="second-check">przebyte wycieczki</label>
+                                <input id="second-check" type="checkbox" value="Opcja2" th:field="*{optionWrapper.option2}" name="pdf-options" />
+                                <label for="second-check" th:text="${optionWrapper.getDescription2()}"></label>
                             </li>
                             <li>
-                                <input id="third-check" type="checkbox" value="Opcja3" name="pdf-options" />
-                                <label for="third-check">stopień spełnienia warunków</label>
+                                <input id="third-check" type="checkbox" value="Opcja3" th:field="*{optionWrapper.option3}" name="pdf-options" />
+                                <label for="third-check" th:text="${optionWrapper.getDescription3()}"></label>
                             </li>
                             <li>
-                                <input id="fourth-check" type="checkbox" value="Opcja4" name="pdf-options" />
-                                <label for="fourth-check">lista tras do przebycia</label>
+                                <input id="fourth-check" type="checkbox" value="Opcja4" th:field="*{optionWrapper.option4}" name="pdf-options" />
+                                <label for="fourth-check" th:text="${optionWrapper.getDescription4()}"></label>
                             </li>
                         </ul>
                         <input type="submit" value="Generuj do PDF" />
@@ -100,11 +100,11 @@
         Stopień spełnienia warunków do zdobycia odznaki
     </div>
     <div th:text="${summaryString}"></div>
-    <div>
-        <a th:href="@{'/trasy/getPdfSummaryCurrent'}">
-            Generuj podsumowanie do PDF.
-        </a>
-    </div>
+    <!--<div>-->
+        <!--<a th:href="@{'/trasy/getPdfSummaryCurrent'}">-->
+            <!--Generuj podsumowanie do PDF.-->
+        <!--</a>-->
+    <!--</div>-->
 
 </div>
 

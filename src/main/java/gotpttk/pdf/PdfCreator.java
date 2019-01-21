@@ -25,8 +25,30 @@ public class PdfCreator {
     private String summary;
     private boolean isAchieved;
 
+    private boolean shouldGenerateBookRoutes;
+    private boolean shouldGenerateExcursions;
+    private boolean shouldGenerateSummary;
+    private boolean shouldGenerateRemainingRoutes;
+
+
 
     public PdfCreator() {
+    }
+
+    public void setShouldGenerateBookRoutes(boolean shouldGenerateBookRoutes) {
+        this.shouldGenerateBookRoutes = shouldGenerateBookRoutes;
+    }
+
+    public void setShouldGenerateExcursions(boolean shouldGenerateExcursions) {
+        this.shouldGenerateExcursions = shouldGenerateExcursions;
+    }
+
+    public void setShouldGenerateSummary(boolean shouldGenerateSummary) {
+        this.shouldGenerateSummary = shouldGenerateSummary;
+    }
+
+    public void setShouldGenerateRemainingRoutes(boolean shouldGenerateRemainingRoutes) {
+        this.shouldGenerateRemainingRoutes = shouldGenerateRemainingRoutes;
     }
 
     public void setCategory(Category category) {
@@ -63,29 +85,41 @@ public class PdfCreator {
             Paragraph paragraph = new Paragraph("Podsumowanie zdobycia odznaki: " + category.getName(), font);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
-            PdfPTable table = new PdfPTable(4);
-            table.addCell("Z punktu");
-            table.addCell("Do punktu");
-            table.addCell("Data przejscia");
-            table.addCell("Przyznane punkty");
+            if (shouldGenerateBookRoutes){
+                PdfPTable table = new PdfPTable(4);
+                table.addCell("Z punktu");
+                table.addCell("Do punktu");
+                table.addCell("Data przejscia");
+                table.addCell("Przyznane punkty");
 
-            for (var bookRoute : bookRoutes){
-                boolean isFromStart = bookRoute.getIsFromStartToEnd();
-                Route route = bookRoute.getRoute();
+                for (var bookRoute : bookRoutes){
+                    boolean isFromStart = bookRoute.getIsFromStartToEnd();
+                    Route route = bookRoute.getRoute();
 
-                if (isFromStart){
-                    table.addCell(route.getStartingPoint().getName());
-                    table.addCell(route.getEndPoint().getName());
+                    if (isFromStart){
+                        table.addCell(route.getStartingPoint().getName());
+                        table.addCell(route.getEndPoint().getName());
+                    }
+                    else{
+                        table.addCell(route.getEndPoint().getName());
+                        table.addCell(route.getStartingPoint().getName());
+                    }
+                    table.addCell(bookRoute.getDateOfCompletion().toString());
+                    table.addCell(Integer.toString(bookRoute.getPointsAwarded()));
                 }
-                else{
-                    table.addCell(route.getEndPoint().getName());
-                    table.addCell(route.getStartingPoint().getName());
-                }
-                table.addCell(bookRoute.getDateOfCompletion().toString());
-                table.addCell(Integer.toString(bookRoute.getPointsAwarded()));
+                document.add(table);
             }
-            document.add(table);
-            if(summary != null){
+
+            if (shouldGenerateExcursions){
+                document.add(new Paragraph("Przebyte wycieczki"));
+                document.add(new Paragraph("Podczas zdobywania tej odznaki, nie przebyto zadnej wycieczki"));
+            }
+
+            if (shouldGenerateRemainingRoutes){
+                /// todo remaining routes
+            }
+
+            if(shouldGenerateSummary){
                 document.add(new Paragraph("Stopien spelnienia warunkow do zdobycia odznaki: "));
                 document.add(new Paragraph(summary));
             }
@@ -98,4 +132,10 @@ public class PdfCreator {
         return path;
     }
 
+    public void reset() {
+        shouldGenerateRemainingRoutes = false;
+        shouldGenerateExcursions = false;
+        shouldGenerateSummary = false;
+        shouldGenerateBookRoutes = false;
+    }
 }
