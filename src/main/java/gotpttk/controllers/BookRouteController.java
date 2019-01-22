@@ -159,6 +159,7 @@ public class BookRouteController {
         return "show-summary";
     }
 
+
     private List<BookRoute> readRoutesCompletedUnderGivenBadge(Badge badge, int userId){
         var userBadges = badgeService.getAllBadgesScoredByUser(userId);
         var period = getPeriodOfScoringGivenBadge(userBadges, badge);

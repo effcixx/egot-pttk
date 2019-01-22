@@ -66,7 +66,8 @@ body{
 }
 
 #routes-from-user-book thead{
-    background-color: white;
+    background-color: #185fa8;
+    color: white;
 }
 
 #routes-from-user-book tbody tr:nth-child(2n){
@@ -413,6 +414,7 @@ body{
     font-weight: bolder;
 }
 
+/*noinspection CssUnknownTarget*/
 html{
     background: url("/stylesheets/images/mountain.jpg") no-repeat center center fixed;
     -webkit-background-size: cover;
@@ -463,6 +465,7 @@ html{
 }
 .navigation-list a{
     color:white;
+    text-decoration: none;
 }
 .navigation-list a:hover{
     color: rgb(204, 255, 188);
