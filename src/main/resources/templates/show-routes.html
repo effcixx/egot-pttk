@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/test.css">
     <style>
         .ui-datepicker {
-            width: 300px;
+            /*width: 300px;*/
             height: auto;
             margin: 5px auto 0;
             font: 9pt Arial, sans-serif;
@@ -66,19 +66,21 @@
         .ui-datepicker th{
             color: #b9b9e1;
             z-index: 30 !important;
+            width: 30px;
         }
 
         .ui-datepicker tbody td {
             padding: 0;
             background-color: aliceblue;
             z-index: 30 !important;
+            width: 50px;
         }
 
         .ui-datepicker td span, .ui-datepicker td a {
             display: inline-block;
             font-weight: bold;
             text-align: center;
-            width: 30px;
+            width: 40px;
             height: 30px;
             line-height: 30px;
             color: #666666;
@@ -94,6 +96,9 @@
             background: #d1d0f7;
             font-size: 1.1em;
             z-index: 30 !important;
+        }
+        .ui-datepicker-week-end{
+            width: 20px;
         }
     </style>
 </head>
@@ -119,30 +124,6 @@
     </span>
     </div>
 
-    <!--<div class="routes-container">-->
-    <!--<div class="table-wrapper">-->
-    <!--<table class="routes-from-user-book">-->
-    <!--<thead>-->
-    <!--<tr>-->
-    <!--<th>Z punktu</th>-->
-    <!--<th>Do punktu</th>-->
-    <!--<th>Data przejścia</th>-->
-    <!--<th>Punkty</th>-->
-    <!--</tr>-->
-    <!--</thead>-->
-    <!--<tbody>-->
-    <!--<th:block th:each="route : ${currentBookRoutes}">-->
-    <!--<tr>-->
-    <!--<td th:text="${route.isFromStartToEnd} ? ${route.route.startingPoint.name} : ${route.route.endPoint.name}"></td>-->
-    <!--<td th:text="${route.isFromStartToEnd} ? ${route.route.endPoint.name} : ${route.route.startingPoint.name}"></td>-->
-    <!--<td th:text="${route.dateOfCompletion}"></td>-->
-    <!--<td th:text="${route.pointsAwarded}"></td>-->
-    <!--</tr>-->
-    <!--</th:block>-->
-    <!--</tbody>-->
-    <!--</table>-->
-    <!--</div>-->
-    <!--</div>-->
 
     <h4>Trasy przebyte w ramach aktualnie zdobywanej odznaki: </h4>
     <th:block th:each="entry : ${badgeRouteMap}">
@@ -154,18 +135,22 @@
                 <table id="routes-from-user-book">
                     <thead>
                     <tr>
+                        <th>Region</th>
                         <th>Z punktu</th>
                         <th>Do punktu</th>
                         <th>Data przejścia</th>
-                        <th>Punkty</th>
+                        <th>Punkty bazowe</th>
+                        <th>Punkty przyznane</th>
                     </tr>
                     </thead>
                     <tbody>
                     <th:block th:each="route : ${entry.getValue()}">
                         <tr>
+                            <td th:text="${route.route.getStartingPoint().region.name}"></td>
                             <td th:text="${route.isFromStartToEnd} ? ${route.route.startingPoint.name} : ${route.route.endPoint.name}"></td>
                             <td th:text="${route.isFromStartToEnd} ? ${route.route.endPoint.name} : ${route.route.startingPoint.name}"></td>
                             <td th:text="${route.dateOfCompletion}"></td>
+                            <td th:text="${route.isFromStartToEnd} ? ${route.route.getPointsStartToEnd()} : ${route.route.getPointsEndToStart()}"></td>
                             <td th:text="${route.pointsAwarded}"></td>
                         </tr>
                     </th:block>
@@ -195,15 +180,17 @@
             <div class="close">+</div>
 
             <div id="large-route-container" class="large-route-container" style="display: none">
+                <input type="text" id="public-filter" class="routeFilter"
+                       onkeyup="searchFor('public-filter', 'table-public')" placeholder="Przeszukaj trasy i regiony" />
                 <div th:object="${bookRouteWrapper}" id="predefined-route-container" class="predefined-route-container">
                     <div class="table-scroll">
-                        <table>
+                        <table id="table-public" class="routes-to-choose">
                             <thead>
                             <tr>
                                 <th>Trasa</th>
                                 <th>Region</th>
                                 <th>Punktacja</th>
-                                <th>Punktacja (od końca)</th>
+                                <th>Punktacja <br />(od końca)</th>
                                 <th>Wybierz!</th>
                             </tr>
                             </thead>
@@ -246,15 +233,17 @@
             </div>
 
             <div id="large-user-route-container" class="large-user-route-container" style="display: none;">
+                <input type="text" id="private-filter" class="routeFilter"
+                       onkeyup="searchFor('private-filter', 'table-private')" placeholder="Przeszukaj trasy i regiony" />
                 <div id="user-route-container" class="predefined-route-container">
                     <div class="table-scroll">
-                        <table>
+                        <table id="table-private" class="routes-to-choose">
                             <thead>
                             <tr>
                                 <th>Trasa</th>
                                 <th>Region</th>
                                 <th>Punktacja</th>
-                                <th>Punktacja (od końca)</th>
+                                <th>Punktacja <br />(od końca)</th>
                                 <th>Wybierz!</th>
                             </tr>
                             </thead>
@@ -410,17 +399,66 @@
         var buttonPublic = document.getElementById("predefined-route");
         var buttonPrivate = document.getElementById("users-route");
         if (other === 'niepunktowana'){
-            buttonPublic.style.backgroundColor = "#185fa8";
-            buttonPublic.style.color = "white";
+            if (buttonPublic.style.color === "white"){
+                buttonPublic.style.backgroundColor = "white";
+                buttonPublic.style.color = "black";
+            }
+            else{
+                buttonPublic.style.backgroundColor = "#185fa8";
+                buttonPublic.style.color = "white";
+            }
             buttonPrivate.style.backgroundColor = "white";
             buttonPrivate.style.color = "black";
         }
         else{
-            buttonPrivate.style.backgroundColor = "#185fa8";
-            buttonPrivate.style.color = "white";
+            if (buttonPrivate.style.color === "white"){
+                buttonPrivate.style.backgroundColor = "white";
+                buttonPrivate.style.color = "black";
+            }
+            else{
+                buttonPrivate.style.backgroundColor = "#185fa8";
+                buttonPrivate.style.color = "white";
+            }
             buttonPublic.style.backgroundColor = "white";
             buttonPublic.style.color = "black";
 
+        }
+    }
+
+    function searchFor(filterName, tableName){
+        var input, filter, table, tr, td, txtValue;
+        var added = [];
+        input = document.getElementById(filterName);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(tableName);
+        tr = table.getElementsByTagName("tr");
+        for (var i=0; i<tr.length; i++) {
+            var notFoundNumber = 0;
+            for (var j = 0; j < 2; j++) {
+                td = tr[i].getElementsByTagName("td")[j];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        if (i > 0 && added[i-1] !== tr[i]){
+                            added.push(tr[i])
+                        }
+                    } else {
+                        notFoundNumber++;
+                    }
+                }
+            }
+            if (notFoundNumber === 2){
+                tr[i].style.display = "none";
+            }
+        }
+        for (var i=0; i<added.length; i++){
+            if (i%2 === 0){
+                added[i].style.backgroundColor = "white";
+            }
+            else{
+                added[i].style.backgroundColor = "#e1e1e1";
+            }
         }
     }
 </script>

@@ -55,12 +55,12 @@ body{
  }
 
 #routes-from-user-book{
-    width: 80%;
+    width: 100%;
     max-height: 500px;
     margin-left: auto;
     margin-right: auto;
     align-content: center;
-    text-align: center;
+    text-align: left;
     padding: 20px;
     /*position: relative;*/
 }
@@ -68,12 +68,20 @@ body{
 #routes-from-user-book thead{
     background-color: #185fa8;
     color: white;
+    text-align: center;
 }
 
 #routes-from-user-book tbody tr:nth-child(2n){
     background-color: #e1e1e1;
 }
 
+
+#routes-from-user-book tbody tr td:nth-child(5n){
+    text-align: right;
+}
+#routes-from-user-book tbody tr td:last-child{
+     text-align: right;
+}
 
 .routes-from-user-book{
     width: 80%;
@@ -106,12 +114,7 @@ body{
 .predefined-route-container table{
     width: 100%;
     height: 75%;
-}
-.predefined-route-container td:first-child{
-    width: 25%;
-}
-.predefined-route-container td:nth-child(2){
-    width: 25%;
+    padding: 5px;
 }
 
 .routeText{
@@ -148,7 +151,7 @@ body{
 }
 
 .route-form{
-    margin-top:15px;
+    margin-top:10px;
 }
 
 .route-form input, option{
@@ -369,7 +372,7 @@ body{
 
 #info-about-book{
     width: 250px;
-    margin-left: 70%;
+    margin-left: 74%;
     text-align: right;
 }
 
@@ -483,8 +486,17 @@ nav.navigation-list ul li{
     align-content: center;
     font-size: 1.1em;
 }
+#routes-from-user-book td {
+    padding: 5px;
+}
+#routes-from-user-book th:nth-child(5n), td:nth-child(5n)
+                       ,th:last-child, td:last-child{
+    width: 50px;
+}
 
-
+#routes-from-user-book th:first-child, td:first-child{
+    width: 100px;
+}
 
 #routes-from-user-book tbody tr:nth-child(2n){
     background-color: rgba(24, 95, 168, 0.21);
@@ -506,12 +518,12 @@ nav.navigation-list ul li{
     width: 100%;
     height: 75%;
 }
-.predefined-route-container td:first-child{
-    width: 25%;
-}
-.predefined-route-container td:nth-child(2){
-    width: 25%;
-}
+/*.predefined-route-container td:first-child{*/
+    /*width: 25%;*/
+/*}*/
+/*.predefined-route-container td:nth-child(2){*/
+    /*width: 25%;*/
+/*}*/
 
 
 .bg-modal {
@@ -529,9 +541,22 @@ nav.navigation-list ul li{
 }
 
 .bg-modal table {
-    text-align: center;
+    text-align: left;
     align-items: center;
 }
+
+.bg-modal table thead{
+    text-align: center;
+}
+
+.bg-modal table td:nth-child(3n), td:nth-child(4n){
+    text-align: right;
+    /*width: 50px;*/
+}
+
+/*.bg-modal table th:nth-child(3n), th:nth-child(4n){*/
+    /*width: 50px;*/
+/*}*/
 
 #past-routes{
     font-size: 1.5em;
@@ -593,4 +618,41 @@ nav.navigation-list ul li{
     margin-left: -10px;
     font-size: 1.3em;
     padding-left: 5px;
+}
+
+.routeFilter{
+    margin-left: -595px;
+    padding-left: 0;
+    border-color: #185fa8;
+    border-top-width: 2px;
+    border-left-width: 2px;
+    border-bottom-width: 0;
+    width: 200px;
+
+}
+
+.routes-to-choose th:first-child{
+    width: 250px;
+}
+.routes-to-choose td:first-child{
+    width: 250px;
+}
+.routes-to-choose td:nth-child(2n){
+    width: 100px;
+    text-align: center;
+}
+.routes-to-choose td:nth-child(3n){
+    width: 50px;
+}
+.routes-to-choose td:nth-child(4n){
+    width: 50px;
+    text-align: right;
+}
+
+.routes-to-choose td:last-child{
+    text-align: center;
+}
+
+.ui-datepicker-week-end{
+    width: 30px;
 }

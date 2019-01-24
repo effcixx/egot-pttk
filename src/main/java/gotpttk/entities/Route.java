@@ -23,6 +23,17 @@ public class Route {
         this.id = id;
     }
 
+    public Route() {
+    }
+
+    public Route(int pointsStartToEnd, int pointsEndToStart, Point startingPoint, Point endPoint, Tourist routeOwner) {
+        this.pointsStartToEnd = pointsStartToEnd;
+        this.pointsEndToStart = pointsEndToStart;
+        this.startingPoint = startingPoint;
+        this.endPoint = endPoint;
+        this.routeOwner = routeOwner;
+    }
+
     @Basic
     @Column(name = "pun_pocz_kon")
     public int getPointsStartToEnd() {
@@ -48,7 +59,8 @@ public class Route {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Route route = (Route) o;
-        return id == route.id &&
+        return startingPoint.equals(route.startingPoint) &&
+                endPoint.equals(route.endPoint) &&
                 pointsStartToEnd == route.pointsStartToEnd &&
                 pointsEndToStart == route.pointsEndToStart;
     }

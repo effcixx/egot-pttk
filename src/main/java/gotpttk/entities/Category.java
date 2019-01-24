@@ -10,6 +10,14 @@ public class Category {
     private int hierarchyLevel;
     private String name;
 
+    public Category() {
+    }
+
+    public Category(int hierarchyLevel, String name) {
+        this.hierarchyLevel = hierarchyLevel;
+        this.name = name;
+    }
+
     @Id
     @Column(name = "id")
     public int getId() {

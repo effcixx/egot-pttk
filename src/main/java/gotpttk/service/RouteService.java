@@ -35,8 +35,6 @@ public class RouteService {
         routeDao.delete(route);
     }
 
-    /// TODO ZMIENIC
-
     public List<Route> readAllPublic(){
         return routeDao.readAllPublic();
     }

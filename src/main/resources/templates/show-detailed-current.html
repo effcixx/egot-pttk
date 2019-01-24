@@ -27,6 +27,12 @@
     </div>
 
     <div class="summary-subtitle">
+        Stopień spełnienia warunków do zdobycia odznaki
+    </div>
+
+    <h5><div th:text="${summaryString}"></div></h5>
+
+    <div class="summary-subtitle">
         Trasy przebyte podczas zdobywania odznaki
     </div>
     <div>
@@ -35,18 +41,22 @@
                 <table id="routes-from-user-book">
                     <thead>
                     <tr>
+                        <th>Region</th>
                         <th>Z punktu</th>
                         <th>Do punktu</th>
                         <th>Data przejścia</th>
-                        <th>Punkty</th>
+                        <th>Punkty bazowe</th>
+                        <th>Punkty przyznane</th>
                     </tr>
                     </thead>
                     <tbody>
                     <th:block th:each="route : ${routes}">
                         <tr>
+                            <td th:text="${route.route.getStartingPoint().region.name}"></td>
                             <td th:text="${route.isFromStartToEnd} ? ${route.route.startingPoint.name} : ${route.route.endPoint.name}"></td>
                             <td th:text="${route.isFromStartToEnd} ? ${route.route.endPoint.name} : ${route.route.startingPoint.name}"></td>
                             <td th:text="${route.dateOfCompletion}"></td>
+                            <td th:text="${route.isFromStartToEnd} ? ${route.route.getPointsStartToEnd()} : ${route.route.getPointsEndToStart()}"></td>
                             <td th:text="${route.pointsAwarded}"></td>
                         </tr>
                     </th:block>
@@ -95,18 +105,6 @@
     </div>
 
     <h5>Podczas zdobywania tej odznaki, nie przebyto żadnej wycieczki</h5>
-
-    <div class="summary-subtitle">
-        Stopień spełnienia warunków do zdobycia odznaki
-    </div>
-
-
-    <h5><div th:text="${summaryString}"></div></h5>
-    <!--<div>-->
-        <!--<a th:href="@{'/trasy/getPdfSummaryCurrent'}">-->
-            <!--Generuj podsumowanie do PDF.-->
-        <!--</a>-->
-    <!--</div>-->
 
 </div>
 

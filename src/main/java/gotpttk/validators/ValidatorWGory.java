@@ -24,23 +24,18 @@ public class ValidatorWGory extends Validator {
     private static final int BRONZE_SETPOINT = 15;
     private static final int SILVER_SETPOINT = 30;
     private static final int GOLD_SETPOINT = 45;
-    private static final int BOOK_ID = 5;
 
     @Autowired
     public ValidatorWGory(BookService bookService, BadgeService badgeService, CategoryService categoryService) {
         this.bookService = bookService;
         this.badgeService = badgeService;
         this.categoryService = categoryService;
-       // badgeLevel = BadgeLevel.BRAZOWY;
     }
 
     @Override
     public void validate(Book book) {
         int currentNumberOfPoints = bookService.getCurrentNumberOfPoints(book.getOwner().getId());
-        Badge badge;
         Tourist owner = book.getOwner();
-        System.out.println("Masz punktow : " + bookService.getCurrentNumberOfPoints(book.getOwner().getId()));
-        System.out.println("Jestes na poziomie: " + badgeLevel.name());
         var lastBadge = badgeService.getLastBadgeScored(1);
         if (lastBadge != null && lastBadge.getAchievingDate().getYear() == new java.util.Date().getYear()){
             return;
@@ -78,8 +73,16 @@ public class ValidatorWGory extends Validator {
         else if (badgeLevel == BadgeLevel.ZLOTY){
             necessaryPoints = GOLD_SETPOINT;
         }
-        String message =  "Minimum: " + necessaryPoints + " pkt. - brakuje Ci " + (necessaryPoints-currentPoints) +
-                " pkt. (obecnie: " + currentPoints + " pkt.)";
+        int necessaryPointsLeft = necessaryPoints - currentPoints;
+        String message;
+        if (necessaryPointsLeft > 0){
+            message =  "Minimum: " + necessaryPoints + " pkt. - brakuje Ci " + (necessaryPoints-currentPoints) +
+                    " pkt. (obecnie: " + currentPoints + " pkt.)";
+        }
+        else{
+            message = "Osiągnięto wymaganą liczbę punktów (" + necessaryPoints + ").";
+        }
+
         var lastBadge = badgeService.getLastBadgeScored(userId);
         if (lastBadge != null && lastBadge.getAchievingDate().getYear()==new java.util.Date().getYear()){
             message += "\nOdznake mozesz otrzymac najwczesniej w przyszlym roku.";
@@ -92,8 +95,6 @@ public class ValidatorWGory extends Validator {
         var dateSql = new Date(new java.util.Date().getTime());
         var badge = new Badge(dateSql, category, owner);
         badgeService.saveOrUpdate(badge);
-        System.out.println("Saved badge");
     }
-
 
 }

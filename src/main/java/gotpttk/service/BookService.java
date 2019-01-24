@@ -20,7 +20,6 @@ public class BookService {
     @Autowired
     private BookRouteService bookRouteService;
 
-
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveOrUpdate(Book book){
         bookDao.saveOrUpdate(book);
@@ -39,9 +38,7 @@ public class BookService {
         bookDao.delete(book);
     }
 
-    public void updatePointsAndBadgesAfterCompletionOfRoute(Book book){
-        System.out.println("Validating...");
-    }
+    public void updatePointsAndBadgesAfterCompletionOfRoute(Book book){ }
 
     public Book getBookWithUserId(int userId){
         return bookDao.getBookWithUserId(userId);
@@ -49,14 +46,11 @@ public class BookService {
 
     public int getCurrentNumberOfPoints(int userId){
         var latestRoutes = bookRouteService.readRoutesUnderCurrentBadge(userId);
-        System.out.println("******************************");
         latestRoutes.sort((b1, b2) -> b2.getDateOfCompletion().compareTo(b1.getDateOfCompletion()));
-        for (var r : latestRoutes){
-            System.out.println(r.getPointsAwarded() + ": " + r.getRoute());
-        }
-        System.out.println("******************************");
         return latestRoutes.stream().mapToInt(BookRoute::getPointsAwarded).sum();
     }
+
+
 
 
 }

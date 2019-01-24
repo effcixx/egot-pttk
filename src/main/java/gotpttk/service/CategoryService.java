@@ -49,11 +49,9 @@ public class CategoryService {
             return categories.stream().min(Comparator.comparingInt(Category::getHierarchyLevel)).get();
         }
         int highestHierarchyLevel = getHighestHierarchyLevel(categories);
-        System.out.println("Highest hierarchy: " + highestHierarchyLevel);
         int lastBadgeHierarchyLevel = mostRecentBadge.getCategory().getHierarchyLevel();
-        System.out.println("Last badge hierarchy: " + lastBadgeHierarchyLevel);
         if (lastBadgeHierarchyLevel == highestHierarchyLevel){
-            // co tutaj?
+            /// todo re-start process?
             return categories.stream().min(Comparator.comparingInt(Category::getHierarchyLevel)).get();
         }
         return categories.stream().filter(category -> category.getHierarchyLevel() == lastBadgeHierarchyLevel+1)

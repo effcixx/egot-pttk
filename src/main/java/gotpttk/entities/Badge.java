@@ -1,5 +1,7 @@
 package gotpttk.entities;
 
+import org.joda.time.DateTimeComparator;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
@@ -47,7 +49,7 @@ public class Badge {
         if (o == null || getClass() != o.getClass()) return false;
         Badge badge = (Badge) o;
         return id == badge.id &&
-                Objects.equals(achievingDate, badge.achievingDate);
+                DateTimeComparator.getDateOnlyInstance().compare(achievingDate, badge.achievingDate) == 0;
     }
 
     @Override

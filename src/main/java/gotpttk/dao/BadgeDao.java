@@ -65,10 +65,5 @@ public class BadgeDao implements EntityDao<Badge, Integer> {
         var query = session.createQuery("from Badge where owner.id = " + userId);
         return query.getResultList();
     }
-//
-//    public Badge getBadgeUnderCompletionOnGivenDate(Date date, int userId) {
-//        var session = sessionFactory.getCurrentSession();
-//        var query = session.createQuery("from Badge where " + ");
-//        return query.getResultList();
-//    }
+
 }

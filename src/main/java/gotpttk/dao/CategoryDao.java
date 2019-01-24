@@ -47,13 +47,5 @@ public class CategoryDao implements EntityDao<Category, Integer> {
         Query<Category> query = session.createQuery("from Category where hierarchyLevel = " + 1);
         return query.getResultList().get(0);
     }
-
-//    @SuppressWarnings("unchecked")
-//    public int getHighestHierarchyLevel() {
-//        var session = sessionFactory.getCurrentSession();
-//        var query = session.createQuery("select hierarchyLevel from Category");
-//        List<Integer> levels = query.getResultList();
-//        return levels.stream().max(Comparator.comparingInt(l -> l)).orElse(0);
-//    }
 }
 
