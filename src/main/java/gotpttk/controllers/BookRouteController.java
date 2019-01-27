@@ -1,5 +1,6 @@
 package gotpttk.controllers;
 
+import com.sun.istack.Nullable;
 import gotpttk.entities.BookRoute;
 import gotpttk.pdf.PdfCreator;
 import gotpttk.service.*;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -48,8 +50,35 @@ public class BookRouteController {
     @Autowired
     private ValidatorManager validatorManager;
 
+
+    /**
+     * Metoda mapująca url '/show' na widok przedstawiający trasy wpisane do książeczki użytkownika.
+     * @param model
+     * Model używany do komunikacji między kontrolerem a widokiem.
+     * Parametr wykorzystywany przy załadowaniu strony po dodaniu trasy do książeczki.
+     * Zawiera informację o powodzeniu lub niepowodzeniu dodania trasy.
+     * @param redirectAttributes
+     * Parametry przekazywane automatycznie jeśli strona została otwarta poprzez przekierowanie
+     * z innej metody.
+     * @return
+     * Nazwa widoku przedstawiającego trasy wpisane do książeczki użytkownika.
+     */
     @RequestMapping("/show")
-    public String showUsersRoutes(Model model){
+    public String showUsersRoutes(Model model,
+                                  RedirectAttributes redirectAttributes){
+        System.out.println("no mess");
+        addStartupFieldsToModel(model);
+        if (redirectAttributes != null){
+            var message = model.asMap().get("message");
+            if (message != null){
+                model.addAttribute("crudMessage", message);
+            }
+        }
+        return "show-routes";
+    }
+
+
+    private void addStartupFieldsToModel(Model model){
         int userId = 1;
 
         var publicRoutes = routeService.readAllPublic();
@@ -64,9 +93,23 @@ public class BookRouteController {
         model.addAttribute("currentBookRoutes", currentBookRoutes);
         model.addAttribute("currentNumberOfPoints", currentNumberOfPoints);
         model.addAttribute("bookRouteWrapper", new BookRouteWrapper());
-        return "show-routes";
+        System.out.println("==============Elements:=======");
+        for (var el : badgeRouteMap.entrySet()){
+            System.out.println("Badge: " + el.getKey());
+            for (var route : el.getValue()){
+                System.out.println(route);
+            }
+        }
     }
 
+    /**
+     * Metoda mapująca url '/showSummary' na widok przedstawiający
+     * zdobyte przez użytkownika odznaki.
+     * @param model
+     * Model używany do komunikacji między kontrolerem a widokiem.
+     * @return
+     * Nazwa widoku przedstawiającego odznaki zdobyte przez użytkownika.
+     */
     @RequestMapping("/showSummary")
     public String showSummary(Model model){
         int userId = 1;
@@ -80,12 +123,14 @@ public class BookRouteController {
 
 
     /**
+     * Metoda mapująca url '/showSummary' na widok przedstawiający szczegółowe informacje
+     * o zdobytej w przeszłości odznace.
      * @param badgeId
-     * Abababab
+     * Identyfikator (id) odznaki, atrybut pobrany automatycznie metodą GET.
      * @param model
-     * Sabababa
+     * Model używany do komunikacji między kontrolerem a widokiem.
      * @return
-     * Elemele
+     * Nazwa widoku przedstawiającego podsumowanie zdobycia danej odznaki.
      */
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @GetMapping("/showDetailed")
@@ -102,6 +147,14 @@ public class BookRouteController {
         return "show-detailed-badge";
     }
 
+    /**
+     * Metoda mapująca url '/showDetailedCurrent' na widok przedstawiający szczegółowe informacje
+     * o zdobywanej aktualnie odznace.
+     * @param model
+     * Model używany do komunikacji między kontrolerem a widokiem.
+     * @return
+     * Nazwa widoku przedstawiającego podsumowanie zdobywania aktualnej odznaki.
+     */
     @RequestMapping("/showDetailedCurrent")
     public String showDetailedCurrent(Model model){
         int userId = 1;
@@ -116,6 +169,18 @@ public class BookRouteController {
         model.addAttribute("optionWrapper", new PdfOptionWrapper());
         return "show-detailed-current";
     }
+
+    /**
+     * Metoda generująca plik PDF z uwzględnieniem części podsumowania, które mają być
+     * wygenerowane w pliku. Wykorzystywana dla odznaki zdobytej w przeszłości.
+     * @param optionWrapper
+     * Obiekt typu PdfOptionWrapper określający, które części podsumowania mają być zawarte
+     * w pliku.
+     * @return
+     * Plik pdf z odpowiednimi częściami podsumowania.
+     * @throws IOException
+     * Metoda może rzucić wyjątek IOException
+     */
 
     @PostMapping("/getPdfSummary")
     public ResponseEntity<byte[]> showGeneratedPdfWithRestrictions
@@ -134,6 +199,17 @@ public class BookRouteController {
         return getResponseEntityPdf(headers);
     }
 
+    /**
+     * Metoda generująca plik PDF z uwzględnieniem części podsumowania, które mają być
+     * wygenerowane w pliku. Wykorzystywana dla aktualnie zdobywanej odznaki.
+     * @param optionWrapper
+     * Obiekt typu PdfOptionWrapper określający, które części podsumowania mają być zawarte
+     * w pliku.
+     * @return
+     * Plik pdf z odpowiednimi częściami podsumowania.
+     * @throws IOException
+     * Metoda może rzucić wyjątek IOException
+     */
     @PostMapping("/getPdfSummaryCurrent")
     public ResponseEntity<byte[]> showGeneratedPdfForCurrentWithRestrictions
             (@ModelAttribute PdfOptionWrapper optionWrapper) throws IOException{
@@ -176,10 +252,25 @@ public class BookRouteController {
     }
 
 
+    /**
+     * Metoda zapisuje nowe przejście trasy do książeczki.
+     * @param bookRouteWrapper
+     * Obiekt klasy BookRouteWrapper opakowującej parametry dotyczące trasy w książeczce
+     * pobrane z widoku.
+     * @param bindingResult
+     * Obiekt reprezentujący wynik bindowania danych.
+     * @param model
+     * Model używany do komunikacji między kontrolerem a widokiem.
+     * @param redirectAttributes
+     * Atrybuty przekierowania pobierane automatycznie.
+     * @return
+     * Przekierowanie do strony wyświetlającej trasy w książeczce.
+     */
     @PostMapping("/submitRoute")
     public String submitPostRoute(@Valid @ModelAttribute BookRouteWrapper bookRouteWrapper,
                                   BindingResult bindingResult,
-                                  Model model){
+                                  Model model,
+                                  RedirectAttributes redirectAttributes){
         System.out.println(bookRouteWrapper.chosenRouteId + " "
                 + bookRouteWrapper.dateOfCompletion + " " + bookRouteWrapper.isFromStartToEnd);
         if (bindingResult.hasErrors()){
@@ -196,12 +287,17 @@ public class BookRouteController {
                 category, route, book);
         System.out.println(bookRouteToAdd);
 
-        model.addAttribute("crudMessage", "Trasa dodana poprawnie");
         bookRouteService.saveOrUpdate(bookRouteToAdd);
         bookService.updatePointsAndBadgesAfterCompletionOfRoute(book);
-        return showUsersRoutes(model);
+        //addStartupFieldsToModel(model);
+        redirectAttributes.addFlashAttribute("message", "Trasa dodana poprawnie");
+        return "redirect:/trasy/show";
+//        return showUsersRoutes(model);
     }
 
+    /**
+     * Klasa opakowująca parametry dotyczące przejścia nowej trasy w książeczce.
+     */
     static class BookRouteWrapper{
         @NotNull
         private int chosenRouteId;

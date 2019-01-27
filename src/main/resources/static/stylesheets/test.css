@@ -104,9 +104,14 @@ body{
 .table-scroll tbody tr:nth-child(2n){
     background-color: #e1e1e1;
 }
-.table-scroll{
+#public-table-scroll{
     height: 400px;
 }
+
+#private-table-scroll {
+    height: 379px;
+}
+
 .predefined-route-container{
     background-color: white;
     overflow: auto;
@@ -148,6 +153,10 @@ body{
     border-width: 1px;
     border-style: solid;
     margin-bottom: 5px;
+}
+
+.chooseRouteTypeButton:hover{
+    cursor: pointer;
 }
 
 .route-form{
@@ -372,7 +381,8 @@ body{
 
 #info-about-book{
     width: 250px;
-    margin-left: 74%;
+    margin-right: 20px;
+    margin-left: auto;
     text-align: right;
 }
 
@@ -399,7 +409,9 @@ body{
     margin-bottom: 30px;
 }
 
-
+#addRouteButton:hover{
+    cursor: pointer;
+}
 
 
 .page-header{
@@ -537,7 +549,7 @@ nav.navigation-list ul li{
     align-items: center;
     text-align: center;
     z-index: 10;
-    margin-left: -113px;
+    margin-left: 0;
 }
 
 .bg-modal table {
@@ -630,6 +642,15 @@ nav.navigation-list ul li{
     width: 200px;
 
 }
+.bg-modal table td {
+    padding: 5px;
+}
+.routes-to-choose{
+    padding: 5px;
+}
+.routes-to-choose tr:hover{
+    cursor: pointer;
+}
 
 .routes-to-choose th:first-child{
     width: 250px;
@@ -650,9 +671,17 @@ nav.navigation-list ul li{
 }
 
 .routes-to-choose td:last-child{
-    text-align: center;
+    text-align: right;
 }
 
 .ui-datepicker-week-end{
     width: 30px;
+}
+
+
+button#add-own-route-button {
+    margin-right: -610px;
+    font-weight: bold;
+    color: #185fa8;
+    font-size: 0.8em;
 }

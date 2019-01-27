@@ -161,7 +161,7 @@
     </th:block>
 
 
-    <div id="popup-crud" class="outer-popup">
+    <div id="popup-crud" class="outer-popup" style="display: none">
         <div class="middle-popup">
             <div class="inner-popup">
                 <div class="close-popup">+</div>
@@ -172,123 +172,125 @@
             </div>
         </div>
     </div>
-    <div class="bg-modal">
-        <div class="modal-contents">
-            <button id="predefined-route" class="chooseRouteTypeButton"
-                    onclick="changeVisibilityOfContainer('large-route-container', 'large-user-route-container', 'niepunktowana')">Trasa punktowana</button>
-            <button id="users-route" class="chooseRouteTypeButton" onclick="changeVisibilityOfContainer('large-user-route-container', 'large-route-container', 'punktowana')">Trasa niepunktowana</button>
-            <div class="close">+</div>
 
-            <div id="large-route-container" class="large-route-container" style="display: none">
-                <input type="text" id="public-filter" class="routeFilter"
-                       onkeyup="searchFor('public-filter', 'table-public')" placeholder="Przeszukaj trasy i regiony" />
-                <div th:object="${bookRouteWrapper}" id="predefined-route-container" class="predefined-route-container">
-                    <div class="table-scroll">
-                        <table id="table-public" class="routes-to-choose">
-                            <thead>
-                            <tr>
-                                <th>Trasa</th>
-                                <th>Region</th>
-                                <th>Punktacja</th>
-                                <th>Punktacja <br />(od końca)</th>
-                                <th>Wybierz!</th>
+</div>
+<div class="bg-modal">
+    <div class="modal-contents">
+        <button id="predefined-route" class="chooseRouteTypeButton"
+                onclick="changeVisibilityOfContainer('large-route-container', 'large-user-route-container', 'niepunktowana')">Trasa punktowana</button>
+        <button id="users-route" class="chooseRouteTypeButton" onclick="changeVisibilityOfContainer('large-user-route-container', 'large-route-container', 'punktowana')">Trasa niepunktowana</button>
+        <div class="close">+</div>
+
+        <div id="large-route-container" class="large-route-container" style="display: none">
+            <input type="text" id="public-filter" class="routeFilter"
+                   onkeyup="searchFor('public-filter', 'table-public')" placeholder="Przeszukaj trasy i regiony" />
+            <div th:object="${bookRouteWrapper}" id="predefined-route-container" class="predefined-route-container">
+                <div class="table-scroll" id="public-table-scroll">
+                    <table id="table-public" class="routes-to-choose">
+                        <thead>
+                        <tr>
+                            <th>Trasa</th>
+                            <th>Region</th>
+                            <th>Punktacja</th>
+                            <th>Punktacja <br />(od końca)</th>
+                            <!--<th>Wybierz!</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="route : ${publicRoutes}">
+                            <tr class="clickable-row-public"
+                                th:data-thing="${route.showRoute()}"
+                                th:data-id="${route.id}"
+                                onclick="updateForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">
+                                <td th:text="${route.startingPoint.name} + ' - ' + ${route.endPoint.name}"></td>
+                                <td th:text="${route.startingPoint.region.name}"></td>
+                                <td th:text="${route.pointsStartToEnd}"></td>
+                                <td th:text="${route.pointsEndToStart}"></td>
+                                <!--<td>-->
+                                    <!--<button class="choose-route-button">wybierz-->
+                                    <!--</button>-->
+                                <!--</td>-->
                             </tr>
-                            </thead>
-                            <tbody>
-                            <th:block th:each="route : ${publicRoutes}">
-                                <tr>
-                                    <td th:text="${route.startingPoint.name} + ' - ' + ${route.endPoint.name}"></td>
-                                    <td th:text="${route.startingPoint.region.name}"></td>
-                                    <td th:text="${route.pointsStartToEnd}"></td>
-                                    <td th:text="${route.pointsEndToStart}"></td>
-                                    <td>
-                                        <button class="choose-route-button"
-                                                th:data-thing="${route.showRoute()}"
-                                                th:data-id="${route.id}"
-                                                onclick="updateForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">wybierz
-                                        </button>
-                                    </td>
-                                </tr>
-                            </th:block>
-                            </tbody>
-                        </table>
-                    </div>
+                        </th:block>
+                        </tbody>
+                    </table>
                 </div>
-                <form id="public-route-form" style="display: none" class="route-form"
-                      onsubmit="if(!confirm('Czy potwierdzasz dodanie do książeczki?')){return false;}"
-                      method="post" action="/trasy/submitRoute" th:object="${bookRouteWrapper}">
-                    <label for="route"><input type="text" id="route" name="route" class="routeText" disabled /></label>
-                    <label for="direction">
-                        <select th:field="*{isFromStartToEnd}" id="direction" name="direction" class="directionText">
-                            <option th:value="true" >Wprzód</option>
-                            <option th:value="false">Od końca</option>
-                        </select>
-                    </label>
-                    <label for="date"><input type="text" id="date" name="date" class="datePicker" th:field="*{dateOfCompletion}" required/></label>
-                    <span th:if="${#fields.hasErrors('dateOfCompletion')}" th:errors="*{dateOfCompletion}"></span>
-                    <br/>
-                    <label><input type="hidden" id="chosenRouteId" name="chosenRouteId" th:field="*{chosenRouteId}"/></label>
-                    <label><input type="submit" id="submitButton" class="submitRouteButton" value="Dodaj trasę" /></label>
-                </form>
             </div>
+            <form id="public-route-form" style="display: none" class="route-form"
+                  onsubmit="if(!confirm('Czy potwierdzasz dodanie do książeczki?')){return false;}"
+                  method="post" action="/trasy/submitRoute" th:object="${bookRouteWrapper}">
+                <label for="route"><input type="text" id="route" name="route" class="routeText" disabled /></label>
+                <label for="direction">
+                    <select th:field="*{isFromStartToEnd}" id="direction" name="direction" class="directionText">
+                        <option th:value="true" >Wprzód</option>
+                        <option th:value="false">Od końca</option>
+                    </select>
+                </label>
+                <label for="date"><input type="text" id="date" name="date" class="datePicker" th:field="*{dateOfCompletion}"
+                                         placeholder="Podaj datę" required/></label>
+                <span th:if="${#fields.hasErrors('dateOfCompletion')}" th:errors="*{dateOfCompletion}"></span>
+                <br/>
+                <label><input type="hidden" id="chosenRouteId" name="chosenRouteId" th:field="*{chosenRouteId}"/></label>
+                <label><input type="submit" id="submitButton" class="submitRouteButton" value="Dodaj trasę" /></label>
+            </form>
+        </div>
 
-            <div id="large-user-route-container" class="large-user-route-container" style="display: none;">
-                <input type="text" id="private-filter" class="routeFilter"
-                       onkeyup="searchFor('private-filter', 'table-private')" placeholder="Przeszukaj trasy i regiony" />
-                <div id="user-route-container" class="predefined-route-container">
-                    <div class="table-scroll">
-                        <table id="table-private" class="routes-to-choose">
-                            <thead>
-                            <tr>
-                                <th>Trasa</th>
-                                <th>Region</th>
-                                <th>Punktacja</th>
-                                <th>Punktacja <br />(od końca)</th>
-                                <th>Wybierz!</th>
+        <div id="large-user-route-container" class="large-user-route-container" style="display: none;">
+            <input type="text" id="private-filter" class="routeFilter"
+                   onkeyup="searchFor('private-filter', 'table-private')" placeholder="Przeszukaj trasy i regiony" />
+            <div id="user-route-container" class="predefined-route-container">
+                <div class="table-scroll" id="private-table-scroll">
+                    <table id="table-private" class="routes-to-choose">
+                        <thead>
+                        <tr>
+                            <th>Trasa</th>
+                            <th>Region</th>
+                            <th>Punktacja</th>
+                            <th>Punktacja <br />(od końca)</th>
+                            <!--<th>Wybierz!</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="route : ${userRoutes}">
+                            <tr class="clickable-row-private"
+                                th:data-thing="${route.showRoute()}" th:data-id="${route.id}"
+                                onclick="updateSecondForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">
+                                <td th:text="${route.startingPoint.name} + ' - ' + ${route.endPoint.name}"></td>
+                                <td th:text="${route.startingPoint.region.name}"></td>
+                                <td th:text="${route.pointsStartToEnd}"></td>
+                                <td th:text="${route.pointsEndToStart}"></td>
+                                <!--<td>-->
+                                    <!--<button class="choose-route-button">wybierz-->
+                                    <!--</button>-->
+
+                                <!--</td>-->
                             </tr>
-                            </thead>
-                            <tbody>
-                            <th:block th:each="route : ${userRoutes}">
-                                <tr>
-                                    <td th:text="${route.startingPoint.name} + ' - ' + ${route.endPoint.name}"></td>
-                                    <td th:text="${route.startingPoint.region.name}"></td>
-                                    <td th:text="${route.pointsStartToEnd}"></td>
-                                    <td th:text="${route.pointsEndToStart}"></td>
-                                    <td>
-                                        <button class="choose-route-button"
-                                                th:data-thing="${route.showRoute()}" th:data-id="${route.id}"
-                                                onclick="updateSecondForm(this.getAttribute('data-thing'), this.getAttribute('data-id'))">wybierz
-                                        </button>
-
-                                    </td>
-                                </tr>
-                            </th:block>
-                            </tbody>
-                        </table>
-                    </div>
-
+                        </th:block>
+                        </tbody>
+                    </table>
                 </div>
-                <form id="user-route-form" style="display: none" class="route-form"
-                      onsubmit="if(!confirm('Czy potwierdzasz dodanie do książeczki?')){return false;}"
-                      method="post" action="/trasy/submitRoute" th:object="${bookRouteWrapper}">
-                    <label for="route"><input type="text" id="userRoute" class="routeText" name="route" disabled /></label>
-                    <label for="direction">
-                        <select th:field="*{isFromStartToEnd}" id="userRouteDirection" class="directionText" name="direction">
-                            <option value="true" selected>Wprzód</option>
-                            <option value="false">Od końca</option>
-                        </select>
-                    </label>
-                    <label for="date"><input type="text" id="userRouteDate" name="date" class="datePicker" th:field="*{dateOfCompletion}"
-                                             required/></label>
-                    <br/>
-                    <label><input type="hidden" id="chosenUserRouteId" name="chosenRouteId" th:field="*{chosenRouteId}"/></label>
-                    <label><input type="submit" id="submitUserRouteButton" class="submitRouteButton" value="Dodaj trasę" /></label>
-                </form>
+
             </div>
+            <button id="add-own-route-button">Dodaj trasę własną do listy</button>
+            <form id="user-route-form" style="display: none" class="route-form"
+                  onsubmit="if(!confirm('Czy potwierdzasz dodanie do książeczki?')){return false;}"
+                  method="post" action="/trasy/submitRoute" th:object="${bookRouteWrapper}">
+                <label for="route"><input type="text" id="userRoute" class="routeText" name="route" disabled /></label>
+                <label for="direction">
+                    <select th:field="*{isFromStartToEnd}" id="userRouteDirection" class="directionText" name="direction">
+                        <option value="true" selected>Wprzód</option>
+                        <option value="false">Od końca</option>
+                    </select>
+                </label>
+                <label for="date"><input type="text" id="userRouteDate" name="date" class="datePicker" th:field="*{dateOfCompletion}"
+                                         placeholder="Podaj datę" required/></label>
+                <br/>
+                <label><input type="hidden" id="chosenUserRouteId" name="chosenRouteId" th:field="*{chosenRouteId}"/></label>
+                <label><input type="submit" id="submitUserRouteButton" class="submitRouteButton" value="Dodaj trasę" /></label>
+            </form>
         </div>
     </div>
 </div>
-
 <footer id="book-footer">Developed by MH</footer>
 
 </body>
@@ -297,6 +299,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script>
+    var popupCrud = document.getElementById("popup-crud");
+    var popupMessage = document.getElementById("popupMessage");
+    if (popupMessage != null){
+        popupCrud.style.display = "";
+    }
     function showCrudMessage(message){
         var popup = document.getElementById("popupMessage");
         popup.innerText = message;
@@ -315,11 +322,70 @@
         document.querySelector('.outer-popup').style.display = "none";
     });
 
-    var popupCrud = document.getElementById("popup-crud");
-    var popupMessage = document.getElementById("popupMessage");
-    if (popupMessage == null){
-        popupCrud.style.display = "none";
-    }
+
+
+    $(document).ready(function () {
+        $('.clickable-row-public').click(function () {
+            var allClickable = document.getElementsByClassName('clickable-row-public');
+            var whiteColor = "rgb(0, 0, 0, 0)";
+            var grayishColor = "rgb(225, 225, 225)";
+            var highlitedColor = "rgb(140, 210, 170)";
+
+            for (var i=0; i<allClickable.length; i++){
+                if ($(allClickable[i]).css('backgroundColor') === highlitedColor){
+                    if (i === 0){
+                        allClickable[i].style.backgroundColor = whiteColor;
+                    }
+                    else if (i === allClickable.length - 1){
+                        var isPreviousGray = allClickable[i-1].style.backgroundColor === grayishColor;
+                        allClickable[i].style.backgroundColor = isPreviousGray ? whiteColor : grayishColor;
+                    }
+                    else{
+                        var bothSurroundingGray = $(allClickable[i-1]).css('backgroundColor') === grayishColor
+                            && $(allClickable[i+1]).css('backgroundColor') === grayishColor;
+                        if (!bothSurroundingGray){
+                            $(allClickable[i]).css('background', grayishColor);
+                        }
+                        else{
+                            $(allClickable[i]).css('background', whiteColor);
+                        }
+                    }
+                }
+            }
+            $(this).css('background', highlitedColor);
+        });
+    });
+    $(document).ready(function () {
+        $('.clickable-row-private').click(function () {
+            var allClickable = document.getElementsByClassName('clickable-row-private');
+            var whiteColor = "rgb(0, 0, 0, 0)";
+            var grayishColor = "rgb(225, 225, 225)";
+            var highlitedColor = "rgb(140, 210, 170)";
+
+            for (var i=0; i<allClickable.length; i++){
+                if ($(allClickable[i]).css('backgroundColor') === highlitedColor){
+                    if (i === 0){
+                        allClickable[i].style.backgroundColor = whiteColor;
+                    }
+                    else if (i === allClickable.length - 1){
+                        var isPreviousGray = allClickable[i-1].style.backgroundColor === grayishColor;
+                        allClickable[i].style.backgroundColor = isPreviousGray ? whiteColor : grayishColor;
+                    }
+                    else{
+                        var bothSurroundingGray = $(allClickable[i-1]).css('backgroundColor') === grayishColor
+                            && $(allClickable[i+1]).css('backgroundColor') === grayishColor;
+                        if (!bothSurroundingGray){
+                            $(allClickable[i]).css('background', grayishColor);
+                        }
+                        else{
+                            $(allClickable[i]).css('background', whiteColor);
+                        }
+                    }
+                }
+            }
+            $(this).css('background', highlitedColor);
+        });
+    });
 
     function onLoad(){
         var today = new Date().toISOString().split('T')[0];
@@ -453,11 +519,13 @@
             }
         }
         for (var i=0; i<added.length; i++){
-            if (i%2 === 0){
-                added[i].style.backgroundColor = "white";
-            }
-            else{
-                added[i].style.backgroundColor = "#e1e1e1";
+            if ($(added[i]).css('backgroundColor') !== "rgb(140, 210, 170)"){
+                if (i%2 === 0){
+                    added[i].style.backgroundColor = "white";
+                }
+                else{
+                    added[i].style.backgroundColor = "#e1e1e1";
+                }
             }
         }
     }

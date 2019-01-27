@@ -167,7 +167,7 @@ public class BookRouteServiceTests {
         int result = bookRouteComparator
                 .compare(previouslyAddedBookRoute, laterAddedBookRoute);
 
-        assertTrue(result > 0);
+        assertTrue(result < 0);
     }
 
     @Test

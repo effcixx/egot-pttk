@@ -247,7 +247,7 @@ public class BookRouteService {
                     result = firstBookRoute.getPointsAwarded() - secondBookRoute.getPointsAwarded();
                 }
                 else{
-                    result = secondBookRoute.getId() - firstBookRoute.getId();
+                    result = firstBookRoute.getId() - secondBookRoute.getId();
                 }
             }
             else{
